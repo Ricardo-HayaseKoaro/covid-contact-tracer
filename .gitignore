@@ -4,7 +4,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-covid_tracker/db.sqlite3
+covid_contact_tracer/db.sqlite3
 
 # C extensions
 *.so
@@ -116,3 +116,4 @@ media/
 # **/migrations/**
 # !**/migrations
 # !**/migrations/__init__.py
+node_modules

@@ -35,4 +35,5 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
 
     def perform_create(self, serializer):
         serializer.save()
-
+    
+    
