@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development ./covid_contact_tracer/frontend/src/index.js --output-path covid_contact_tracer/frontend/static/frontend/",
+    "dev": "webpack --mode development --watch ./covid_contact_tracer/frontend/src/index.js --output-path covid_contact_tracer/frontend/static/frontend/",
     "build": "webpack --mode production ./covid_contact_tracer/frontend/src/index.js --output-path covid_contact_tracer/frontend/static/frontend"
   },
   "repository": {
@@ -28,8 +28,11 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "recharts": "^1.8.5"
   }
 }

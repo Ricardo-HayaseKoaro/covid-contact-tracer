@@ -1,9 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
+import Dashboard from './core/Dashboard.js'
+
+import Header from './layout/Header';
 
 class App extends Component{
     render(){
-        return <h1>React app</h1>
+        return (
+         <Dashboard/>
+        )
     }
 }
 
