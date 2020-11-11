@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 # Location Viewset
 
-class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     
     permission_classes = [
         permissions.AllowAny,
