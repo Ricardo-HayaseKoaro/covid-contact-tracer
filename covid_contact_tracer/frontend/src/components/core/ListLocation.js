@@ -17,7 +17,7 @@ const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
   {
     id: 'latitude',
-    label: 'Laittude',
+    label: 'Latitude',
     minWidth: 170,
     align: 'right',
   },
@@ -28,7 +28,7 @@ const columns = [
     align: 'right',
   },
   {
-    id: 'startTimestamp',
+    id: 'startTime',
     label: 'TimeStamp',
     minWidth: 170,
     align: 'right',

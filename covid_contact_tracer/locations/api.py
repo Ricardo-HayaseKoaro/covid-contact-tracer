@@ -3,8 +3,19 @@ from rest_framework.decorators import action
 from rest_framework import viewsets, permissions, mixins
 from .serializers import LocationSerializer
 from rest_framework.response import Response
+from django_filters import rest_framework as filters
 from .utils import convertE7coord
 import datetime
+
+#Location Filter
+
+class LocationFilter(filters.FilterSet):
+    startTime = filters.DateTimeFromToRangeFilter()
+    endTime =  filters.DateTimeFromToRangeFilter()
+
+    class Meta:
+        model = Location
+        fields = ['startTime', 'endTime']
 
 # Location Viewset
 
@@ -15,6 +26,10 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
     ]
     serializer_class = LocationSerializer
     queryset = Location.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = LocationFilter
+
+    
 
     def create(self, request, *args, **kwargs):
          # Create a list of dict with valid key - value for location model
@@ -41,3 +56,5 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         serializer.save()
     
     
+
+

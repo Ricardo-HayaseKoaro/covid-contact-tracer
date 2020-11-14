@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'locations',
-    'frontend'
+    'frontend',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -111,3 +112,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
