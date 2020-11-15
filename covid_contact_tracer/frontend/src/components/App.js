@@ -1,6 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+
 import Dashboard from './layout/Dashboard.js';
+import Login from './accounts/Login.js';
+import Register from './accounts/Register';
 
 import {Provider as AlertProvider} from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -10,7 +14,7 @@ import store from '../store';
 
 import { getLocations} from '../actions/locations'
 
-store.dispatch(getLocations())
+// store.dispatch(getLocations())
 
 //AlertOptions
 const AlertOptions = {
@@ -24,7 +28,13 @@ class App extends Component{
         <Provider store = {store}>
             <AlertProvider template={AlertTemplate}
             {...AlertOptions}>
-                <Dashboard/>
+                <Router>
+                    <Switch>
+                        <Route exact path="/" component={Dashboard}/>
+                        <Route exact path="/login" component={Login}/>
+                        <Route exact path="/register" component={Register}/>
+                    </Switch>
+                </Router>
             </AlertProvider>
         </Provider>
         )
