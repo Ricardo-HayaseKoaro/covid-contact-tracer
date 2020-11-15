@@ -12,6 +12,7 @@ python-decouple = "*"
 django-filter = "*"
 
 [dev-packages]
+rope = "*"
 
 [requires]
 python_version = "3.7"

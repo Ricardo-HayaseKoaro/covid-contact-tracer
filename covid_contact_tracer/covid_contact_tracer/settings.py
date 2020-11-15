@@ -28,7 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'locations',
     'frontend',
-    'django_filters'
+    'django_filters',
+    'knox',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -114,5 +116,6 @@ STATIC_URL = '/static/'
 GOOGLE_API_KEY = config('GOOGLE_API_KEY')
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
 }
