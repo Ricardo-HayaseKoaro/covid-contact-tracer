@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-import { GET_LOCATIONS } from './types';
+import { GET_LOCATIONS, GET_ERRORS } from './types';
+import { createMessage } from './messages';
 
 // GET LOCATIONS
-export const get_locations = () => (dispatch) => {
+export const getLocations = () => (dispatch) => {
     axios
       .get('/api/locations')
       .then((res) => {
@@ -12,5 +13,14 @@ export const get_locations = () => (dispatch) => {
           payload: res.data,
         });
       })
-      .catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
+      .catch(err => {
+        const errors = {
+          msg: err.response.data,
+          status: err.response.status
+        };
+        dispatch({
+          type: GET_ERRORS,
+          payload: errors
+        });
+      });
   };
