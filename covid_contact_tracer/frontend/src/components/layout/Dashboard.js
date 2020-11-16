@@ -18,10 +18,16 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+import ListItems from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import ListLocation from './ListLocation';
+
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 
 function Copyright() {
   return (
@@ -117,7 +123,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+function Dashboard(props) {
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -160,7 +167,7 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <ListItems/> 
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -193,3 +200,4 @@ export default function Dashboard() {
     </div>
   );
 }
+export default connect(mapStateToProps)(Dashboard);

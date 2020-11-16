@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,7 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import {Link as LinkRouter } from 'react-router-dom';
+import { register } from '../../actions/auth';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 function Copyright() {
     return (
@@ -48,12 +50,47 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignUp() {
+const mapStateToProps = state => {
+    return {
+      isAuthenticated: state.auth.isAuthenticated
+    }
+  }
+  
+const mapDispatchToProps = dispatch => {
+    return {
+        register: ({username, password, email}) => dispatch(register({username, password, email}))
+    }
+}
+
+function Register(props) {
+
+    if (props.isAuthenticated) {
+        return <Redirect to="/" />;
+    }
+
     const classes = useStyles();
+
+    const [username, setUsername] = useState();
+    const [password, setPassword] = useState();
+    const [email, setEmail] = useState();
+
     const onSubmit = e =>{
         e.preventDefault();
-        console.log('Submit');
+        props.register({username, password, email});   
     }
+    
+    const onChangeUsername = e => {
+        setUsername(e.target.value);
+    }
+    
+    const onChangePassword = e => {
+        setPassword(e.target.value);
+    }
+
+    const onChangeEmail = e => {
+        setEmail(e.target.value);
+    }
+    
     return (
         <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -76,6 +113,7 @@ export default function SignUp() {
                     id="username"
                     label="Username"
                     autoFocus
+                    onChange={onChangeUsername}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -87,6 +125,7 @@ export default function SignUp() {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    onChange={onChangeEmail}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -99,6 +138,7 @@ export default function SignUp() {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    onChange={onChangePassword}
                 />
                 </Grid>
             </Grid>
@@ -126,3 +166,5 @@ export default function SignUp() {
         </Container>
     );
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register)

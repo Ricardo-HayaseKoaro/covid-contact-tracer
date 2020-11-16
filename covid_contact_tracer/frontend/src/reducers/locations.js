@@ -1,4 +1,4 @@
-import { GET_LOCATIONS } from '../actions/types.js';
+import { GET_LOCATIONS, CLEAR_LOCATIONS } from '../actions/types.js';
 
 const initialState = {
     locations: []
@@ -8,8 +8,13 @@ const initialState = {
       switch(action.type){
             case GET_LOCATIONS:
               return{
-                  ...state,
-                  locations: action.payload
+                ...state,
+                locations: action.payload
+              };
+              case CLEAR_LOCATIONS:
+              return {
+                ...state,
+                locations: [],
               };
             default:
                 return state;

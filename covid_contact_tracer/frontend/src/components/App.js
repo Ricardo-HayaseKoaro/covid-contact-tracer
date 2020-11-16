@@ -5,6 +5,7 @@ import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import Dashboard from './layout/Dashboard';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
+import Alerts from './layout/Alerts';
 import PrivateRoute from './common/PrivateRoute';
 
 import {Provider as AlertProvider} from 'react-alert';
@@ -25,8 +26,7 @@ const AlertOptions = {
 }
 
 class App extends Component{
-    componentDidMount(){
-        store.dispatch(loadUser());
+    componentDidMount(){        store.dispatch(loadUser());
     }
     render(){
         return (
@@ -34,10 +34,11 @@ class App extends Component{
             <AlertProvider template={AlertTemplate}
             {...AlertOptions}>
                 <Router>
+                    <Alerts/>
                     <Switch>
                         <PrivateRoute exact path="/" component={Dashboard}/>
-                        <PrivateRoute exact path="/login" component={Login}/>
-                        <PrivateRoute exact path="/register" component={Register}/>
+                        <Route exact path="/login" component={Login}/>
+                        <Route exact path="/register" component={Register}/>
                     </Switch>
                 </Router>
             </AlertProvider>
