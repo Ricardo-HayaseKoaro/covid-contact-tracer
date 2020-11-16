@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { returnErrors } from './messages';
+import { getLocations } from './locations';
 
 import {
   USER_LOADED,
@@ -53,6 +54,7 @@ export const login = (username, password) => (dispatch) => {
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
+      dispatch(getLocations());
     })
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
