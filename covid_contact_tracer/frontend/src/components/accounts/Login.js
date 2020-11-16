@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import { connect } from 'react-redux';
+import { login } from '../../actions/auth';
+import { Redirect } from 'react-router-dom';
+
 
 function Copyright() {
   return (
@@ -46,8 +51,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: (username, password) => dispatch(login(username, password))
+  }
+}
+
+function Login(props) {
+
+  if (props.isAuthenticated) {
+    return <Redirect to="/" />;
+  }
+
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+
   const classes = useStyles();
+
+  const onSubmit = e => {
+    e.preventDefault();
+    props.login(username, password)
+  }
+
+  const onChangeUsername = e => {
+    setUsername(e.target.value);
+  }
+
+  const onChangePassword = e => {
+    setPassword(e.target.value);
+  }
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,7 +98,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={onSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -70,6 +109,7 @@ export default function SignIn() {
             name="username"
             autoComplete="username"
             autoFocus
+            onChange={onChangeUsername}
           />
           <TextField
             variant="outlined"
@@ -81,11 +121,12 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={onChangePassword}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <Button
             type="submit"
             fullWidth
@@ -115,3 +156,5 @@ export default function SignIn() {
     </Container>
   );
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
