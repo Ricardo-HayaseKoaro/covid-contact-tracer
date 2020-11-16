@@ -25,6 +25,7 @@ export const loadUser = () => (dispatch, getState) => {
         type: USER_LOADED,
         payload: res.data,
       });
+      dispatch(getLocations());
     })
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
