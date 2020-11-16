@@ -21,7 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItems from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
-import ListLocation from './ListLocation';
+import ListLocation from '../locations/ListLocation';
 
 import { connect } from 'react-redux';
 

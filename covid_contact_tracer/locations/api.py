@@ -46,7 +46,6 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
                 new_local["startTime"] =  datetime.datetime.utcfromtimestamp(epoch).replace(tzinfo=datetime.timezone.utc)
                 epoch = int(local["placeVisit"]["duration"]["endTimestampMs"])/1000
                 new_local["endTime"] = datetime.datetime.utcfromtimestamp(epoch).replace(tzinfo=datetime.timezone.utc)
-                new_local["owner"] = self.request.user
                 serializer = self.get_serializer(data=new_local)
                 serializer.is_valid(raise_exception=True)
                 self.perform_create(serializer)
@@ -54,7 +53,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         return Response(resp)
 
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(owner=self.request.user)
     
     
 
