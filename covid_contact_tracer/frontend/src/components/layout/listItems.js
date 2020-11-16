@@ -5,11 +5,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import Divider from '@material-ui/core/Divider';
 
 import { logout } from '../../actions/auth';
 import { connect } from 'react-redux';
@@ -50,9 +51,10 @@ return (
         </ListItemIcon>
         <ListItemText primary="Integrations" />
       </ListItem>
+      <Divider/>
       <ListItem button component={Link} to="/login" onClick={props.logout}>
         <ListItemIcon> 
-          <BarChartIcon />
+          <ExitToAppIcon />
         </ListItemIcon>
         <ListItemText primary="Logout" />
       </ListItem>
