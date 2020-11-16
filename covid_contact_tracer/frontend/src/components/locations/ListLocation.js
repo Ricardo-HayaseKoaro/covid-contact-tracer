@@ -29,7 +29,13 @@ const columns = [
   },
   {
     id: 'startTime',
-    label: 'TimeStamp',
+    label: 'Start time',
+    minWidth: 170,
+    align: 'right',
+  },
+  {
+    id: 'endTime',
+    label: 'End time',
     minWidth: 170,
     align: 'right',
   },
@@ -89,13 +95,17 @@ function ListLocation(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+              {props.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
-                      const value = row[column.id];
+                      if ((column.id == "startTime") || (column.id == "endTime")){
+                        let d = new Date(row[column.id])
+                        var value = d.toLocaleString();
+                      }else 
+                        var value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell key={column.id+i} align={column.align}>
                           {column.format && typeof value === 'number' ? column.format(value) : value}
                         </TableCell>
                       );
