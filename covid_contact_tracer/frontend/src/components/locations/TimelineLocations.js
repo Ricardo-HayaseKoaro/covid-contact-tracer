@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Convert date format from DateTimeField format(python) to date (js)
 const convertDate = data => {
   let d = new Date(data);
   return d.toLocaleString();

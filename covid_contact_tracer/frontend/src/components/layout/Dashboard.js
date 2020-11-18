@@ -22,7 +22,8 @@ import ListItems from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import ListLocation from '../locations/ListLocation';
-
+import TimelineLocations from '../locations/TimelineLocations';
+import SimpleMap from '../locations/LocationMaps';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
@@ -173,22 +174,14 @@ function Dashboard(props) {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
-            {/* <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid> */}
-            {/* Recent Deposits */}
-            {/* <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid> */}
-            {/* Recent Orders */}
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Paper className={classes.paper}>
-                <ListLocation />
+                <TimelineLocations />
+              </Paper>
+            </Grid>
+             <Grid item xs={6}>
+             <Paper className={classes.paper}>
+                <SimpleMap />
               </Paper>
             </Grid>
           </Grid>
