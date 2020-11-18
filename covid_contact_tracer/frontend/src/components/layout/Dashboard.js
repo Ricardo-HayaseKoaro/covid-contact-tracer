@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import GridList from '@material-ui/core/GridList';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -118,10 +119,23 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    height: '80vh',
   },
   fixedHeight: {
     height: 240,
   },
+  flexSection: {
+    flexGrow: 1,
+    display: 'flex',
+    minHeight: 0,
+  },
+  
+  flexColsScroll: {
+    flexGrow: 1,
+    overflow: 'auto',
+    minHeight: '80vh',
+  },
+
 }));
 
 function Dashboard(props) {
@@ -151,7 +165,7 @@ function Dashboard(props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Covid Contact Tracer
+            Timeline
           </Typography>
         </Toolbar>
       </AppBar>
@@ -174,13 +188,13 @@ function Dashboard(props) {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <Paper className={classes.paper}>
+            <Grid item xs={6}  >
+              <Paper className={classes.paper} >
                 <TimelineLocations />
               </Paper>
             </Grid>
              <Grid item xs={6}>
-             <Paper className={classes.paper}>
+             <Paper className={classes.paper} >
                 <SimpleMap />
               </Paper>
             </Grid>

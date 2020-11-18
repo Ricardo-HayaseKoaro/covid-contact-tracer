@@ -8,6 +8,7 @@ import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import Typography from '@material-ui/core/Typography';
+import PlaceIcon from '@material-ui/icons/Place';
 
 import { getLocations } from '../../actions/locations';
 import { connect } from 'react-redux';
@@ -43,7 +44,7 @@ function TimelineLocations(props) {
   const classes = useStyles();
 
   return (
-    <Timeline>
+    <Timeline >
       {props.locations.map((local) => {
         return (
           <TimelineItem key={local["id"]}>
@@ -53,7 +54,9 @@ function TimelineLocations(props) {
               </Typography>
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <TimelineDot/>
+              <TimelineDot>
+                <PlaceIcon style={{ fontSize: 20 }}/>
+              </TimelineDot>
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
