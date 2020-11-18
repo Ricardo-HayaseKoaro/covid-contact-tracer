@@ -6,6 +6,7 @@ import Dashboard from './layout/Dashboard';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
 import Alerts from './layout/Alerts';
+import UploadFile from './locations/UploadLocations';
 import PrivateRoute from './common/PrivateRoute';
 
 import {Provider as AlertProvider} from 'react-alert';

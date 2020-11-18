@@ -9,12 +9,12 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Divider from '@material-ui/core/Divider';
+import UploadLocations from '../locations/UploadLocations';
 
 import { logout } from '../../actions/auth';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import {Link} from 'react-router-dom';
 
 
@@ -33,12 +33,7 @@ return (
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary="Customers" />
-      </ListItem>
+      <UploadLocations/>
       <ListItem button>
         <ListItemIcon>
           <BarChartIcon />

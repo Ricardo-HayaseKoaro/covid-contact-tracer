@@ -46,7 +46,7 @@ function TimelineLocations(props) {
     <Timeline>
       {props.locations.map((local) => {
         return (
-          <TimelineItem>
+          <TimelineItem key={local["id"]}>
             <TimelineOppositeContent>
               <Typography>
                 {local["name"]}

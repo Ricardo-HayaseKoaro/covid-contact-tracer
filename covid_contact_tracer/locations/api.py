@@ -32,7 +32,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         return self.request.user.locations.all()
 
     def create(self, request, *args, **kwargs):
-         # Create a list of dict with valid key - value for location model
+        # Create a list of dict with valid key - value for location model
         locations = request.data["timelineObjects"]
         resp = []
         for local in locations:
