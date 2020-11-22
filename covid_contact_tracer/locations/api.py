@@ -19,7 +19,7 @@ class LocationFilter(filters.FilterSet):
 
 # Location Viewset
 
-class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
     
     permission_classes = [
         permissions.IsAuthenticated,

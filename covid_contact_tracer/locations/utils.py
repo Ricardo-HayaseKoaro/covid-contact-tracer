@@ -1,2 +1,2 @@
 def convertE7coord(coord):
-    return str(float(coord)/1000)
+    return str(float(coord)/10000000)

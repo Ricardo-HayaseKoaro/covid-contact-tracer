@@ -1,30 +1,116 @@
 import React, { Component } from 'react';
-import GoogleMapReact from 'google-map-react';
- 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
- 
-class SimpleMap extends Component {
-  static defaultProps = {
-    center: {
-      lat: 0,
-      lng: 0
-    },
-    zoom: 0
-  };
- 
-  render() {
-    return (
-      // Important! Always set the container height explicitly
-      <div style={{ height: '100%', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyBD7B_F6RSNSmY9A2glFg-QDUGxAF4lO3Q"}}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-        </GoogleMapReact>
-      </div>
-    );
+import { connect } from 'react-redux';
+import { getLocations } from '../../actions/locations';
+
+// examples:
+import GoogleMap from '../maps/GoogleMaps';
+
+import LOS_ANGELES_CENTER from './la_center';
+
+//Redux mapping
+const mapStateToProps = state => {
+  return {
+    locations: state.locations.locations
   }
 }
- 
-export default SimpleMap;
+
+// InfoWindow component
+const InfoWindow = (props) => {
+  const { place } = props;
+  const infoWindowStyle = {
+    position: 'relative',
+    bottom: 150,
+    left: '-45px',
+    width: 220,
+    backgroundColor: 'white',
+    boxShadow: '0 2px 7px 1px rgba(0, 0, 0, 0.3)',
+    padding: 10,
+    fontSize: 14,
+    zIndex: 100,
+  };
+
+  return (
+    <div style={infoWindowStyle}>
+      <div style={{ fontSize: 16 }}>
+        {place.name}
+      </div>
+      {/* <div style={{ fontSize: 14 }}>
+        <span style={{ color: 'grey' }}>
+          {place.rating}
+          {' '}
+        </span>
+        <span style={{ color: 'orange' }}>
+          {String.fromCharCode(9733).repeat(Math.floor(place.rating))}
+        </span>
+        <span style={{ color: 'lightgrey' }}>
+          {String.fromCharCode(9733).repeat(5 - Math.floor(place.rating))}
+        </span>
+      </div>
+      <div style={{ fontSize: 14, color: 'grey' }}>
+        {place.types[0]}
+      </div>
+      <div style={{ fontSize: 14, color: 'grey' }}>
+        {'$'.repeat(place.price_level)}
+      </div>
+      <div style={{ fontSize: 14, color: 'green' }}>
+        {place.opening_hours.open_now ? 'Open' : 'Closed'}
+      </div> */}
+    </div>
+  );
+};
+
+// Marker component
+const Marker = ({ show, place }) => {
+  const markerStyle = {
+    border: '1px solid white',
+    borderRadius: '50%',
+    height: 10,
+    width: 10,
+    backgroundColor: show ? 'red' : 'blue',
+    cursor: 'pointer',
+    zIndex: 10,
+  };
+
+  return (
+    <>
+      <div style={markerStyle} />
+      {show && <InfoWindow place={place} />}
+    </>
+  );
+};
+
+function MarkerInfoWindow(props){
+
+  // onChildClick callback can take two arguments: key and childProps
+  // onChildClickCallback = (key) => {
+  //   this.setState((state) => {
+  //     const index = state.places.findIndex((e) => e.id === key);
+  //     state.places[index].show = !state.places[index].show; // eslint-disable-line no-param-reassign
+  //     return { places: state.places };
+  //   });
+  // };
+
+  return (
+    <>
+      {(
+        <GoogleMap
+          defaultZoom={5}
+          defaultCenter={LOS_ANGELES_CENTER}
+          // onChildClick={this.onChildClickCallback}
+        >
+          {props.locations.map((place) => (
+            <Marker
+              key={place.id}
+              lat = {place.latitude}
+              lng = {place.longitude}
+              show={false}
+              place={place}
+            />
+          ))}
+        </GoogleMap>
+      )}
+    </>
+  );
+}
+
+export default connect(mapStateToProps)(MarkerInfoWindow);
