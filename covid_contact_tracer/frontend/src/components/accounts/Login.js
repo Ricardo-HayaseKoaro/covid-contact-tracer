@@ -65,10 +65,6 @@ const mapDispatchToProps = dispatch => {
 
 function Login(props) {
 
-  if (props.isAuthenticated) {
-    return <Redirect to="/" />;
-  }
-
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
 
@@ -86,7 +82,6 @@ function Login(props) {
   const onChangePassword = e => {
     setPassword(e.target.value);
   }
-
 
   return (
     <Container component="main" maxWidth="xs">
