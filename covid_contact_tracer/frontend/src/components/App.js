@@ -1,7 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
-import Routing from './common/Routing';
+import Dashboard from './layout/Dashboard';
+import Login from './accounts/Login';
+import Register from './accounts/Register';
+import Alerts from './layout/Alerts';
+import UploadFile from './locations/UploadLocations';
+import PrivateRoute from './common/PrivateRoute';
 
 import {Provider as AlertProvider} from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -9,8 +15,11 @@ import AlertTemplate from 'react-alert-template-basic';
 import  { Provider } from 'react-redux';
 import store from '../store';
 
+import { getLocations} from '../actions/locations'
 import { loadUser } from '../actions/auth';
- 
+
+// store.dispatch(getLocations())
+
 //AlertOptions
 const AlertOptions = {
     timeout: 3000,
@@ -26,7 +35,14 @@ class App extends Component{
         <Provider store = {store}>
             <AlertProvider template={AlertTemplate}
             {...AlertOptions}>
-                <Routing/>
+                <Router>
+                    <Alerts/>
+                    <Switch>
+                        <PrivateRoute exact path="/" component={Dashboard}/>
+                        <Route exact path="/login" component={Login}/>
+                        <Route exact path="/register" component={Register}/>
+                    </Switch>
+                </Router>
             </AlertProvider>
         </Provider>
         )
