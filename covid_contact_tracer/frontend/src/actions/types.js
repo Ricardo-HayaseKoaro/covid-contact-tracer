@@ -13,5 +13,7 @@ export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const CLEAR_LOCATIONS = 'CLEAR_LOCATIONS';
 export const UPLOAD_SUCESS = 'UPLOAD_SUCESS';
 export const UPLOAD_FAIL = 'UPLOAD_FAIL';
+export const UPLOADING = 'UPLOADING';
+export const LOADING_DATA = 'LOADING_DATA';
 
 

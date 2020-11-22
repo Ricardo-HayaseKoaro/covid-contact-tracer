@@ -1,7 +1,9 @@
-import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL } from '../actions/types.js';
+import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, LOADING_DATA } from '../actions/types.js';
 
 const initialState = {
-    locations: []
+    locations: [],
+    isUploading: false,
+    isLoadingData: false,
   }
 
   export default function(state = initialState, action) {
@@ -9,7 +11,8 @@ const initialState = {
             case GET_LOCATIONS:
               return{
                 ...state,
-                locations: action.payload
+                locations: action.payload,
+                isLoadingData: false,
               };
             case CLEAR_LOCATIONS:
               return {
@@ -19,10 +22,21 @@ const initialState = {
             case UPLOAD_SUCESS:
               return {
                 ...state,
-                locations: action.payload,
+                locations: state.locations.concat(action.payload),
+                isUploading: false,
               };
             case UPLOAD_FAIL:
               return state;
+            case UPLOADING:
+              return {
+                ...state,
+                isUploading: true,
+              };
+            case LOADING_DATA:
+              return {
+                ...state,
+                isLoadingData: true,
+              };
             default:
                 return state;
       }

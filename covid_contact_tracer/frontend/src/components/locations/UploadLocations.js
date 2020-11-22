@@ -10,7 +10,7 @@ import { uploadLocations } from '../../actions/locations';
 
 const mapStateToProps = state => {
     return {}
-  }
+}
   
 const mapDispatchToProps = dispatch => {
     return {
@@ -34,6 +34,9 @@ class UploadLocationsDialog extends Component {
 
     // Read all file and send array of files to backend
     handleSave(files) {
+        this.setState({
+            open: false,
+        });
         const _this = this;
         return Promise.all([].map.call(files, function (file) {
             return new Promise(function (resolve, reject) {

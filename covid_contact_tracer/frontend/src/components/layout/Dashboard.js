@@ -25,6 +25,8 @@ import Deposits from './Deposits';
 import ListLocation from '../locations/ListLocation';
 import TimelineLocations from '../locations/TimelineLocations';
 import SimpleMap from '../locations/LocationMaps';
+import Modal from './Modal';
+
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
@@ -185,6 +187,7 @@ function Dashboard(props) {
         <ListItems/> 
       </Drawer>
       <main className={classes.content}>
+        <Modal/>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
