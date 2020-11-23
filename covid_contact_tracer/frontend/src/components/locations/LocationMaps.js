@@ -77,38 +77,61 @@ const Marker = ({ show, place }) => {
   );
 };
 
-function MarkerInfoWindow(props){
+class MarkerInfoWindow extends Component{
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      places: [],
+    };
+  }
+
+  componentWillReceiveProps(props) {
+    props.locations.forEach((place) => {
+      place.show = false;
+    });
+    this.setState({
+      places: props.locations,
+    });
+  }
 
   // onChildClick callback can take two arguments: key and childProps
-  // onChildClickCallback = (key) => {
-  //   this.setState((state) => {
-  //     const index = state.places.findIndex((e) => e.id === key);
-  //     state.places[index].show = !state.places[index].show; // eslint-disable-line no-param-reassign
-  //     return { places: state.places };
-  //   });
-  // };
+  onChildClickCallback = (key) => {
+    this.setState((state) => {
+      const index = state.places.findIndex((e) => e.id === key);
+      state.places[index].show = !state.places[index].show;
+      return { places: state.places };
+    });
+  };
 
-  return (
-    <>
-      {(
-        <GoogleMap
-          defaultZoom={5}
-          defaultCenter={LOS_ANGELES_CENTER}
-          // onChildClick={this.onChildClickCallback}
-        >
-          {props.locations.map((place) => (
-            <Marker
-              key={place.id}
-              lat = {place.latitude}
-              lng = {place.longitude}
-              show={false}
-              place={place}
-            />
-          ))}
-        </GoogleMap>
-      )}
-    </>
-  );
+  render(){
+
+    const { places } = this.state;
+
+    return (
+      <>
+        {(
+          <GoogleMap
+            defaultZoom={5}
+            defaultCenter={LOS_ANGELES_CENTER}
+            // onChildClick={this.onChildClickCallback}
+          >
+            {places.map((place) => {
+              return ( 
+              <Marker
+                key = {place.id}
+                lat = {place.latitude}
+                lng = {place.longitude}
+                show = {place.show}
+                place={place}
+              />)
+            })}
+          </GoogleMap>
+        )}
+      </>
+    );
+
+  }
 }
 
 export default connect(mapStateToProps)(MarkerInfoWindow);
