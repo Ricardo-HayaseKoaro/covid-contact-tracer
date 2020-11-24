@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Timeline from '@material-ui/lab/Timeline';
 import TimelineItem from '@material-ui/lab/TimelineItem';
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
@@ -9,18 +8,11 @@ import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import Typography from '@material-ui/core/Typography';
 import PlaceIcon from '@material-ui/icons/Place';
+import LocationDialog from './LocationDialog';
+import Link from '@material-ui/core/Link';
 
-import { getLocations } from '../../actions/locations';
 import { connect } from 'react-redux';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: '6px 16px',
-  },
-  secondaryTail: {
-    backgroundColor: theme.palette.secondary.main,
-  },
-}));
 
 // Convert date format from DateTimeField format(python) to date (js)
 const convertDate = data => {
@@ -33,15 +25,19 @@ const mapStateToProps = state => {
     locations: state.locations.locations
   }
 }
-  
-const mapDispatchToProps = dispatch => {
-  return {
-    getLocations: () => dispatch(getLocations())
-  }
-}
 
 function TimelineLocations(props) {
-  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const [local, setLocal] = React.useState(null);
+
+  const handleClickOpen = (local) => {
+    setOpen(true);
+    setLocal(local);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Timeline >
@@ -50,7 +46,15 @@ function TimelineLocations(props) {
           <TimelineItem key={local["id"]}>
             <TimelineOppositeContent>
               <Typography>
-                {local["name"]}
+                  <Link
+                      component="button"
+                      onClick={() => handleClickOpen(local)}
+                      color="inherit"
+                      align="right"
+                      variant="inherit"
+                  >                
+                    {local["name"]}
+                  </Link>
               </Typography>
             </TimelineOppositeContent>
             <TimelineSeparator>
@@ -61,14 +65,22 @@ function TimelineLocations(props) {
             </TimelineSeparator>
             <TimelineContent>
               <Typography color="textSecondary">
-                  {convertDate(local["startTime"])}
+                <Link
+                    component="button"
+                    onClick={() => handleClickOpen(local)}
+                    color="inherit"    
+                    variant="inherit"
+                    >                
+                    {convertDate(local["startTime"])}
+                  </Link>
               </Typography>
             </TimelineContent>
           </TimelineItem>
         );
       })}
+      <LocationDialog location={local} open={open} onClose={handleClose}/>
     </Timeline>
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimelineLocations);
+export default connect(mapStateToProps)(TimelineLocations);
