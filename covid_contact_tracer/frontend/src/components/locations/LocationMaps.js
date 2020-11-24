@@ -86,13 +86,15 @@ class MarkerInfoWindow extends Component{
     };
   }
 
-  componentWillReceiveProps(props) {
-    props.locations.forEach((place) => {
-      place.show = false;
-    });
-    this.setState({
-      places: props.locations,
-    });
+  componentDidUpdate(previousProps, previousState) {
+    if (previousProps.locations !== this.props.locations) {
+      this.props.locations.forEach((place) => {
+        place.show = false;
+      });
+      this.setState({
+        places: this.props.locations,
+      });
+    }
   }
 
   // onChildClick callback can take two arguments: key and childProps
