@@ -6,6 +6,9 @@ from rest_framework.response import Response
 from django_filters import rest_framework as filters
 from .utils import convertE7coord
 import datetime
+import googlemaps
+from decouple import config
+
 
 #Location Filter
 
@@ -54,7 +57,12 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-    
-    
+
+
+    @action(methods=['get'], detail=True)
+    def place_details(self, request, pk=None):
+        gmaps = googlemaps.Client(key=config("GOOGLE_API_KEY"))
+        place = gmaps.place(place_id=pk)
+        return Response(place)
 
 
