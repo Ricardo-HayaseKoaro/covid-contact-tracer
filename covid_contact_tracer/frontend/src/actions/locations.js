@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA} from './types';
+import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA, GET_DETAILS, LOADING_DETAILS} from './types';
 import { createMessagem, returnErrors } from './messages';
 import { tokenConfig } from './auth';
 
@@ -40,4 +40,19 @@ export const uploadLocations = (body) => (dispatch, getState) => {
     });
 };
 
+// GET PLACE DETAILS
+export const getDetails = (placeId) => (dispatch, getState) => {
+  dispatch({ type: LOADING_DETAILS });
+
+  axios.get('/api/locations/'+placeId+'/place_details/', tokenConfig(getState))
+  .then((res) => {
+    dispatch({
+      type: GET_DETAILS,
+      payload: res.data,
+    });
+  })
+  .catch(err => dispatch
+    (returnErrors(err.response.data, err.response.status)));
+
+};
 

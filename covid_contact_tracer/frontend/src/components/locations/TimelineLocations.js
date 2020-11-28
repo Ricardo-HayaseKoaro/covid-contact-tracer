@@ -11,6 +11,7 @@ import PlaceIcon from '@material-ui/icons/Place';
 import LocationDialog from './LocationDialog';
 import Link from '@material-ui/core/Link';
 
+import { getDetails } from '../../actions/locations';
 import { connect } from 'react-redux';
 
 
@@ -26,13 +27,18 @@ const mapStateToProps = state => {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    getDetails: (placeId) => dispatch(getDetails(placeId))
+  }
+}
+
 function TimelineLocations(props) {
   const [open, setOpen] = React.useState(false);
-  const [local, setLocal] = React.useState(null);
 
-  const handleClickOpen = (local) => {
+  const handleClickOpen = (placeId, getDetails) => {
+    getDetails(placeId);
     setOpen(true);
-    setLocal(local);
   };
 
   const handleClose = () => {
@@ -48,7 +54,7 @@ function TimelineLocations(props) {
               <Typography>
                   <Link
                       component="button"
-                      onClick={() => handleClickOpen(local)}
+                      onClick={() => handleClickOpen(local["placeId"], props.getDetails)}
                       color="inherit"
                       align="right"
                       variant="inherit"
@@ -67,7 +73,7 @@ function TimelineLocations(props) {
               <Typography color="textSecondary">
                 <Link
                     component="button"
-                    onClick={() => handleClickOpen(local)}
+                    onClick={() => handleClickOpen(local["placeId"])}
                     color="inherit"    
                     variant="inherit"
                     >                
@@ -78,9 +84,9 @@ function TimelineLocations(props) {
           </TimelineItem>
         );
       })}
-      <LocationDialog location={local} open={open} onClose={handleClose}/>
+      <LocationDialog open={open} onClose={handleClose}/>
     </Timeline>
   );
 }
 
-export default connect(mapStateToProps)(TimelineLocations);
+export default connect(mapStateToProps, mapDispatchToProps)(TimelineLocations);

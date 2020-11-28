@@ -15,5 +15,7 @@ export const UPLOAD_SUCESS = 'UPLOAD_SUCESS';
 export const UPLOAD_FAIL = 'UPLOAD_FAIL';
 export const UPLOADING = 'UPLOADING';
 export const LOADING_DATA = 'LOADING_DATA';
+export const GET_DETAILS = 'GET_DETAILS';
+export const LOADING_DETAILS = 'LOADING_DETAILS';
 
 
