@@ -26,6 +26,10 @@ import ListLocation from '../locations/ListLocation';
 import TimelineLocations from '../locations/TimelineLocations';
 import SimpleMap from '../locations/LocationMaps';
 import Modal from './Modal';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+
 
 import { connect } from 'react-redux';
 
@@ -137,6 +141,12 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     minHeight: '80vh',
   },
+  dateInput: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flex: 1,
+    flexWrap: 'wrap'
+  },
 
 }));
 
@@ -191,16 +201,51 @@ function Dashboard(props) {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Grid item xs={6}  >
+            <Grid item xs={12} sm={6}>
+              <Box className={classes.dateInput}>
+                  <TextField
+                      id="datetime-local-start"
+                      label="Start time"
+                      type="datetime-local"
+                      defaultValue="2017-05-24T10:30"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  <TextField
+                      id="datetime-local-end"
+                      label="End time"
+                      type="datetime-local"
+                      defaultValue="2017-05-24T10:30"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+              </Box>
+              <br/>
               <Paper className={classes.paper} >
                 <TimelineLocations />
               </Paper>
             </Grid>
-             <Grid item xs={6}>
-             <Paper className={classes.paper} >
-                <SimpleMap />
-              </Paper>
-            </Grid>
+             <Grid item xs={12} sm={6}>
+              <Box className={classes.dateInput}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      // checked={state.checkedB}
+                      // onChange={handleChange}
+                      name="check_heatmap"
+                      color="primary"
+                    />
+                  }
+                  label="View Heatmap"
+                />
+              </Box>
+              <br/>
+              <Paper className={classes.paper} >
+                  <SimpleMap />
+                </Paper>
+              </Grid>
           </Grid>
           <Box pt={4}>
             <Copyright />
