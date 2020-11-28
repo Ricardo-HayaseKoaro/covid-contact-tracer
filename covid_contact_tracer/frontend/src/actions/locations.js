@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA, GET_DETAILS, LOADING_DETAILS} from './types';
+import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION} from './types';
 import { createMessagem, returnErrors } from './messages';
 import { tokenConfig } from './auth';
 
@@ -14,6 +14,20 @@ export const getLocations = () => (dispatch, getState) => {
         dispatch({
           type: GET_LOCATIONS,
           payload: res.data,
+        });
+      })
+      .catch(err => dispatch
+        (returnErrors(err.response.data, err.response.status)));
+};
+
+// DELETE LOCATIONS
+export const deleteLocation = (location_id) => (dispatch, getState) => {
+    axios
+      .delete('/api/locations/'+location_id+'/',  tokenConfig(getState))
+      .then((res) => {
+        dispatch({
+          type: DELETE_LOCATION,
+          payload: location_id,
         });
       })
       .catch(err => dispatch

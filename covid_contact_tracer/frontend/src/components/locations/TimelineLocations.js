@@ -35,9 +35,11 @@ const mapDispatchToProps = dispatch => {
 
 function TimelineLocations(props) {
   const [open, setOpen] = React.useState(false);
+  const [location_id, setLocationId] =  React.useState(null);
 
-  const handleClickOpen = (placeId, getDetails) => {
-    getDetails(placeId);
+  const handleClickOpen = (placeId, getDetails, location_id) => {
+    getDetails(placeId); // Place id - used by google
+    setLocationId(location_id); // Location id - used by our application
     setOpen(true);
   };
 
@@ -54,7 +56,7 @@ function TimelineLocations(props) {
               <Typography>
                   <Link
                       component="button"
-                      onClick={() => handleClickOpen(local["placeId"], props.getDetails)}
+                      onClick={() => handleClickOpen(local["placeId"], props.getDetails, local["id"])}
                       color="inherit"
                       align="right"
                       variant="inherit"
@@ -73,7 +75,7 @@ function TimelineLocations(props) {
               <Typography color="textSecondary">
                 <Link
                     component="button"
-                    onClick={() => handleClickOpen(local["placeId"])}
+                    onClick={() => handleClickOpen(local["placeId"], props.getDetails, local["id"])}
                     color="inherit"    
                     variant="inherit"
                     >                
@@ -84,7 +86,7 @@ function TimelineLocations(props) {
           </TimelineItem>
         );
       })}
-      <LocationDialog open={open} onClose={handleClose}/>
+      <LocationDialog location_id={location_id} open={open} onClose={handleClose}/>
     </Timeline>
   );
 }

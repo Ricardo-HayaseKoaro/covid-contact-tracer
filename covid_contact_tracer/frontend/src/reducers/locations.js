@@ -1,4 +1,4 @@
-import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, LOADING_DATA, GET_DETAILS, LOADING_DETAILS } from '../actions/types.js';
+import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION } from '../actions/types.js';
 
 const initialState = {
     locations: [],
@@ -15,6 +15,11 @@ const initialState = {
                 ...state,
                 locations: action.payload,
                 isLoadingData: false,
+              };
+            case DELETE_LOCATION:
+              return{
+                ...state,
+                locations: state.locations.filter((location) => location.id !== action.payload),
               };
             case CLEAR_LOCATIONS:
               return {

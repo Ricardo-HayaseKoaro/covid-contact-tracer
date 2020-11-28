@@ -11,6 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import { connect } from 'react-redux';
+import { deleteLocation } from '../../actions/locations';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -26,13 +27,18 @@ function LocationDialog(props) {
   
     return (
       <Dialog aria-labelledby="simple-dialog-title" open={props.open} onClose={props.onClose}>
-         <LocationCard place={props.place_details.result} loading={props.isLoadingDetails}/>
+         <LocationCard deleteLocation={props.deleteLocation} onClose={props.onClose} location_id={props.location_id} place={props.place_details.result} loading={props.isLoadingDetails}/>
       </Dialog>
     ) 
 }
 function LocationCard(props){
   const classes = useStyles();
   const { loading } = props;
+
+  const handleDelete = (location_id) => {
+    props.deleteLocation(location_id);
+    props.onClose();
+  }
 
   return (
     <Card className={classes.card}>
@@ -95,8 +101,8 @@ function LocationCard(props){
         null
         ) : (
         <CardActions>
-          <Button size="small" color="primary">
-            Share
+          <Button size="small" color="primary" onClick={() => handleDelete(props.location_id)}>
+            Delete
           </Button>
           <Button size="small" color="primary">
             Learn More
@@ -113,5 +119,10 @@ const mapStateToProps = state => {
     place_details: state.locations.place_details
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteLocation: (location_id) => dispatch(deleteLocation(location_id))
+  }
+}
 
-export default connect(mapStateToProps)(LocationDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(LocationDialog);
