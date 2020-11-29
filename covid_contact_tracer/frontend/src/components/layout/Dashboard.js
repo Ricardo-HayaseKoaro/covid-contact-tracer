@@ -29,13 +29,20 @@ import Modal from './Modal';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-
+import Button from '@material-ui/core/Button';
 
 import { connect } from 'react-redux';
+import { getLocations } from '../../actions/locations';
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getLocations: (startTime, endTime) => dispatch(getLocations(startTime, endTime))
+  }
+}
 
 function Copyright() {
   return (
@@ -154,6 +161,11 @@ function Dashboard(props) {
   
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [heatmap, setHeatmap] = React.useState(false);
+  const [startTime, setStart] = React.useState("2017-05-24T10:30");
+  const date_aux = new Date ();
+  const [endTime, setEnd] = React.useState(date_aux.toISOString(Date.now()).slice(0,-8));
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -177,7 +189,7 @@ function Dashboard(props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Timeline
+            Your Timeline
           </Typography>
         </Toolbar>
       </AppBar>
@@ -207,20 +219,27 @@ function Dashboard(props) {
                       id="datetime-local-start"
                       label="Start time"
                       type="datetime-local"
-                      defaultValue="2017-05-24T10:30"
+                      value={startTime}                      
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      onChange={event => setStart(event.target.value)}
                     />
                   <TextField
                       id="datetime-local-end"
                       label="End time"
                       type="datetime-local"
-                      defaultValue="2017-05-24T10:30"
+                      defaultValue={endTime}
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      onChange={event => setEnd(event.target.value)}
                     />
+                    <Box marginTop="15px">
+                      <Button variant="outlined" color="primary" onClick={() => props.getLocations(startTime, endTime)}>
+                        Load
+                      </Button>
+                    </Box>
               </Box>
               <br/>
               <Paper className={classes.paper} >
@@ -243,7 +262,7 @@ function Dashboard(props) {
               </Box>
               <br/>
               <Paper className={classes.paper} >
-                  <SimpleMap />
+                  <SimpleMap heatmap={heatmap}/>
                 </Paper>
               </Grid>
           </Grid>
@@ -255,4 +274,4 @@ function Dashboard(props) {
     </div>
   );
 }
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

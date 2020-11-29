@@ -1,4 +1,4 @@
-import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION } from '../actions/types.js';
+import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION, CENTER_MAP, SHOW_MAP } from '../actions/types.js';
 
 const initialState = {
     locations: [],
@@ -6,6 +6,8 @@ const initialState = {
     isLoadingData: false,
     isLoadingDetails: false,
     place_details: {},
+    centerLocation: {},
+    showLocation: null
   }
 
   export default function(state = initialState, action) {
@@ -54,6 +56,16 @@ const initialState = {
               return {
                 ...state,
                 isLoadingDetails: true,
+              };
+            case CENTER_MAP:
+              return {
+                ...state,
+                centerLocation: action.payload,
+              };
+            case SHOW_MAP:
+              return {
+                ...state,
+                showLocation: action.payload,
               };
             default:
                 return state;

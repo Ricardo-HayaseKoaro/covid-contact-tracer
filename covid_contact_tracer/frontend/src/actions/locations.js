@@ -1,15 +1,14 @@
 import axios from 'axios';
 
-import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION} from './types';
+import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION, CENTER_MAP, SHOW_MAP} from './types';
 import { createMessagem, returnErrors } from './messages';
 import { tokenConfig } from './auth';
 
 // GET LOCATIONS
-export const getLocations = () => (dispatch, getState) => {
+export const getLocations = (startTime, endTime) => (dispatch, getState) => {
   dispatch({ type: LOADING_DATA });
-
     axios
-      .get('/api/locations/',  tokenConfig(getState))
+      .get('/api/locations/?ordering=time&startTime_after='+startTime+'&endTime_before='+endTime,  tokenConfig(getState))
       .then((res) => {
         dispatch({
           type: GET_LOCATIONS,
@@ -70,3 +69,20 @@ export const getDetails = (placeId) => (dispatch, getState) => {
 
 };
 
+// CENTER MAP 
+export const centerMap = (local) => (dispatch) => {
+
+  dispatch({ 
+    type: CENTER_MAP,
+    payload: local,
+   });
+};
+
+// SHOW MAP 
+export const showMap = (id) => (dispatch) => {
+
+  dispatch({ 
+    type: SHOW_MAP,
+    payload: id,
+   });
+};

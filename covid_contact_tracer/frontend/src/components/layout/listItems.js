@@ -31,7 +31,7 @@ return (
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        <ListItemText primary="Dashboard" />
+        <ListItemText primary="Your Timeline" />
       </ListItem>
       <UploadLocations/>
       <ListItem button>

@@ -1,14 +1,24 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-// examples:
 import GoogleMap from '../maps/GoogleMaps';
+import {isEmpty} from "lodash"
+
+import { showMap } from '../../actions/locations';
 
 import LOS_ANGELES_CENTER from './la_center';
 
 //Redux mapping
 const mapStateToProps = state => {
   return {
-    locations: state.locations.locations
+    locations: state.locations.locations,
+    centerLocation: state.locations.centerLocation,
+    showLocation: state.locations.showLocation
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    showMap: (id) => dispatch(showMap(id)),
   }
 }
 
@@ -32,27 +42,6 @@ const InfoWindow = (props) => {
       <div style={{ fontSize: 16 }}>
         {place.name}
       </div>
-      {/* <div style={{ fontSize: 14 }}>
-        <span style={{ color: 'grey' }}>
-          {place.rating}
-          {' '}
-        </span>
-        <span style={{ color: 'orange' }}>
-          {String.fromCharCode(9733).repeat(Math.floor(place.rating))}
-        </span>
-        <span style={{ color: 'lightgrey' }}>
-          {String.fromCharCode(9733).repeat(5 - Math.floor(place.rating))}
-        </span>
-      </div>
-      <div style={{ fontSize: 14, color: 'grey' }}>
-        {place.types[0]}
-      </div>
-      <div style={{ fontSize: 14, color: 'grey' }}>
-        {'$'.repeat(place.price_level)}
-      </div>
-      <div style={{ fontSize: 14, color: 'green' }}>
-        {place.opening_hours.open_now ? 'Open' : 'Closed'}
-      </div> */}
     </div>
   );
 };
@@ -64,76 +53,76 @@ const Marker = ({ show, place }) => {
     borderRadius: '50%',
     height: 10,
     width: 10,
-    backgroundColor: show ? 'red' : 'blue',
+    backgroundColor: show==place.id ? 'red' : 'blue',
     cursor: 'pointer',
-    zIndex: 10,
+    position: 'relative',
+    zIndex: show==place.id ? 1000 : 1,
   };
 
   return (
     <>
       <div style={markerStyle} />
-      {show && <InfoWindow place={place} />}
+      {show==place.id && <InfoWindow place={place} />}
     </>
   );
 };
 
-class MarkerInfoWindow extends Component{
-  constructor(props) {
-    super(props);
+function MarkerInfoWindow(props) { 
 
-    this.state = {
-      places: [],
-    };
-  }
-
-  componentDidUpdate(previousProps, previousState) {
-    if (previousProps.locations !== this.props.locations) {
-      this.props.locations.forEach((place) => {
-        place.show = false;
-      });
-      this.setState({
-        places: this.props.locations,
-      });
-    }
-  }
-
-  // onChildClick callback can take two arguments: key and childProps
-  onChildClickCallback = (key) => {
-    this.setState((state) => {
-      const index = state.places.findIndex((e) => e.id === key);
-      state.places[index].show = !state.places[index].show;
-      return { places: state.places };
-    });
+  const onChildClickCallback = (key) => {
+    props.showMap(key);
   };
 
-  render(){
-
-    const { places } = this.state;
-
-    return (
-      <>
-        {(
-          <GoogleMap
-            defaultZoom={5}
-            defaultCenter={LOS_ANGELES_CENTER}
-            // onChildClick={this.onChildClickCallback}
-          >
-            {places.map((place) => {
-              return ( 
-              <Marker
-                key = {place.id}
-                lat = {place.latitude}
-                lng = {place.longitude}
-                show = {place.show}
-                place={place}
-              />)
-            })}
-          </GoogleMap>
-        )}
-      </>
-    );
-
+  const onCloseChild = () => {
+    props.showMap(null);
   }
+
+  useEffect(() => {
+    props.showMap(props.centerLocation["id"]);
+  });
+
+  let markers;
+  if (!isEmpty(props.locations)) {
+    markers = props.locations.map((place) => {
+      return ( 
+      <Marker
+        key = {place.id}
+        lat = {place.latitude}
+        lng = {place.longitude}
+        show = {props.showLocation}
+        place={place}
+      />)
+    })
+  }
+  else {
+    markers = [];
+  }
+
+  // Centering map when click in Place icon in Timeline
+  let center_location;
+  if (!isEmpty(props.centerLocation)){
+    center_location = [parseFloat(props.centerLocation["latitude"]), parseFloat(props.centerLocation["longitude"])];
+  }
+  else {
+    center_location = null;
+  }
+
+  return (
+    <>
+      {(
+        <GoogleMap
+          defaultZoom={13}
+          defaultCenter={LOS_ANGELES_CENTER}
+          onChildClick={onChildClickCallback}
+          onClick={onCloseChild}
+          center={center_location}
+        >
+          {markers}
+        </GoogleMap>
+      )}
+    </>
+  );
 }
 
-export default connect(mapStateToProps)(MarkerInfoWindow);
+export default connect(mapStateToProps,mapDispatchToProps)(MarkerInfoWindow);
+

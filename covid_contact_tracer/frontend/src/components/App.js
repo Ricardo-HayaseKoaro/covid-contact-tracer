@@ -15,10 +15,7 @@ import AlertTemplate from 'react-alert-template-basic';
 import  { Provider } from 'react-redux';
 import store from '../store';
 
-import { getLocations} from '../actions/locations'
 import { loadUser } from '../actions/auth';
-
-// store.dispatch(getLocations())
 
 //AlertOptions
 const AlertOptions = {

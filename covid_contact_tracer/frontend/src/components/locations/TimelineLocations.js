@@ -10,8 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import PlaceIcon from '@material-ui/icons/Place';
 import LocationDialog from './LocationDialog';
 import Link from '@material-ui/core/Link';
+import IconButton from '@material-ui/core/IconButton';
 
-import { getDetails } from '../../actions/locations';
+import { getDetails, centerMap } from '../../actions/locations';
 import { connect } from 'react-redux';
 
 
@@ -29,7 +30,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getDetails: (placeId) => dispatch(getDetails(placeId))
+    getDetails: (placeId) => dispatch(getDetails(placeId)),
+    centerMap: (local) => dispatch(centerMap(local))
   }
 }
 
@@ -66,9 +68,11 @@ function TimelineLocations(props) {
               </Typography>
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <TimelineDot>
-                <PlaceIcon style={{ fontSize: 20 }}/>
-              </TimelineDot>
+              <IconButton onClick={() => props.centerMap(local)} size="small">
+                <TimelineDot>
+                  <PlaceIcon style={{ fontSize: 20 }}/>
+                </TimelineDot>
+              </IconButton>
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>

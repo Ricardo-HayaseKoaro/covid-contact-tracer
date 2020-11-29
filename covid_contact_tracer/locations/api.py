@@ -11,24 +11,32 @@ from decouple import config
 
 
 #Location Filter
-
 class LocationFilter(filters.FilterSet):
     startTime = filters.DateTimeFromToRangeFilter()
     endTime =  filters.DateTimeFromToRangeFilter()
+    ordering = filters.OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ('startTime', 'time'),
+        ),
+
+        # labels do not need to retain order
+        field_labels={
+            'time': 'Time',
+        }
+    )
 
     class Meta:
         model = Location
         fields = ['startTime', 'endTime']
 
 # Location Viewset
-
 class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
     
     permission_classes = [
         permissions.IsAuthenticated,
     ]
     serializer_class = LocationSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = LocationFilter
 
     def get_queryset(self):
