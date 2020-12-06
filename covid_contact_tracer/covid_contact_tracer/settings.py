@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'frontend',
     'django_filters',
     'knox',
-    'accounts'
+    'accounts',
 ]
 
 MIDDLEWARE = [

@@ -8,7 +8,7 @@ from .utils import convertE7coord
 import datetime
 import googlemaps
 from decouple import config
-
+from .contact_tracer import getLocationWithCluster
 
 #Location Filter
 class LocationFilter(filters.FilterSet):
@@ -67,6 +67,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         serializer.save(owner=self.request.user)
 
 
+    # Return details provied by google places api
     @action(methods=['get'], detail=True)
     def place_details(self, request, pk=None):
         gmaps = googlemaps.Client(key=config("GOOGLE_API_KEY"))
@@ -74,3 +75,11 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         return Response(place)
 
 
+
+#Cluster ViewSet
+class ClusterViewSet(viewsets.GenericViewSet):
+
+    # Return clusters information
+    def list(self, request, *args, **kwargs):
+        clusters = getLocationWithCluster(self.request.user)
+        return Response(clusters)

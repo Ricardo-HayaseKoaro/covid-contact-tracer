@@ -10,6 +10,9 @@ django-rest-knox = "*"
 googlemaps = "*"
 python-decouple = "*"
 django-filter = "*"
+django-pandas = "*"
+numpy = "*"
+pandas = "*"
 
 [dev-packages]
 rope = "*"
