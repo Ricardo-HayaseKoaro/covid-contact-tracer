@@ -8,7 +8,7 @@ from .utils import convertE7coord
 import datetime
 import googlemaps
 from decouple import config
-from .contact_tracer import getLocationWithCluster
+from .contact_tracer import getUserLocationWithCluster
 
 #Location Filter
 class LocationFilter(filters.FilterSet):
@@ -76,10 +76,46 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
 
 
 
-#Cluster ViewSet
-class ClusterViewSet(viewsets.GenericViewSet):
+# UserLocationCluster ViewSet - For getting user locations with cluster info
+class UserLocationClusterViewSet(viewsets.ViewSet):
 
-    # Return clusters information
-    def list(self, request, *args, **kwargs):
-        clusters = getLocationWithCluster(self.request.user)
-        return Response(clusters)
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    # Return user locations with clusters informations
+    def list(self, request):
+        # Get query param
+        start = self.request.query_params.get("start")
+        end = self.request.query_params.get("end")
+        # Get all locations
+        query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end)
+        # Serialize
+        serializer = LocationSerializer(query, many=True)
+        locations = getUserLocationWithCluster(self.request.user, query, serializer.data)
+        return Response(locations)
+
+     # Noctify system that user is 
+    # @action(methods=['get'], detail=True)
+    # def place_details(self, request, pk=None):
+    #     gmaps = googlemaps.Client(key=config("GOOGLE_API_KEY"))
+    #     place = gmaps.place(place_id=pk)
+    #     return Response(place)
+
+
+# LocationCluster ViewSet - For getting all locations with cluster info (no info about users)
+class LocationClusterViewSet(viewsets.ViewSet):
+
+    # Return user locations with clusters informations
+    def list(self, request):
+        # Get query param
+        start = self.request.query_params.get("start")
+        end = self.request.query_params.get("end")
+        # Get all locations
+        query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end)
+        # Serialize
+        serializer = LocationSerializer(query, many=True)
+        # locations = getUserLocationWithCluster(self.request.user, query, serializer.data)
+        return Response(locations)
+
+    
