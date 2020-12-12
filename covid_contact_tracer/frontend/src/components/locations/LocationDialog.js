@@ -27,7 +27,7 @@ function LocationDialog(props) {
   
     return (
       <Dialog aria-labelledby="simple-dialog-title" open={props.open} onClose={props.onClose}>
-         <LocationCard deleteLocation={props.deleteLocation} onClose={props.onClose} location_id={props.location_id} place={props.place_details.result} loading={props.isLoadingDetails}/>
+         <LocationCard location={props.location} deleteLocation={props.deleteLocation} onClose={props.onClose} place={props.place_details.result} loading={props.isLoadingDetails}/>
       </Dialog>
     ) 
 }
@@ -94,6 +94,9 @@ function LocationCard(props){
                 )
               })
             ) : ( null )}
+            <Typography variant="body2" component="p">
+              <b>Number of contacts:</b> {props.location["contacts"].length}
+            </Typography>
           </React.Fragment>
         )}
       </CardContent>
@@ -101,7 +104,7 @@ function LocationCard(props){
         null
         ) : (
         <CardActions>
-          <Button size="small" color="primary" onClick={() => handleDelete(props.location_id)}>
+          <Button size="small" color="primary" onClick={() => handleDelete(props.locations["id"])}>
             Delete
           </Button>
           <Button size="small" color="primary">
