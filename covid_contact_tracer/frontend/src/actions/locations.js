@@ -8,7 +8,7 @@ import { tokenConfig } from './auth';
 export const getLocations = (startTime, endTime) => (dispatch, getState) => {
   dispatch({ type: LOADING_DATA });
     axios
-      .get('/api/locations/?ordering=time&startTime_after='+startTime+'&endTime_before='+endTime,  tokenConfig(getState))
+      .get('/api/user_clusters/?start='+startTime+'&end='+endTime,  tokenConfig(getState))
       .then((res) => {
         dispatch({
           type: GET_LOCATIONS,

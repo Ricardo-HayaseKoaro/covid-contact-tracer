@@ -89,13 +89,13 @@ class UserLocationClusterViewSet(viewsets.ViewSet):
         start = self.request.query_params.get("start")
         end = self.request.query_params.get("end")
         # Get all locations
-        query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end)
+        query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
         # Serialize
         serializer = LocationSerializer(query, many=True)
         locations = getUserLocationWithCluster(self.request.user, query, serializer.data)
         return Response(locations)
 
-     # Noctify system that user is 
+    # Noctify system that user is 
     # @action(methods=['get'], detail=True)
     # def place_details(self, request, pk=None):
     #     gmaps = googlemaps.Client(key=config("GOOGLE_API_KEY"))
