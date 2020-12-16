@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -9,6 +9,12 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import Skeleton from '@material-ui/lab/Skeleton';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Collapse from '@material-ui/core/Collapse';
+import clsx from 'clsx';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { red } from '@material-ui/core/colors';
 
 import { connect } from 'react-redux';
 import { deleteLocation } from '../../actions/locations';
@@ -20,6 +26,26 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 190,
   },
+  cardActions: {
+    marginLeft: 7,
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  notify: {
+    color: theme.palette.getContrastText(red[700]),
+    backgroundColor: red[700],
+    '&:hover': {
+      backgroundColor: red[900],
+    },
+  }
 }));
 
 function LocationDialog(props) {
@@ -33,6 +59,7 @@ function LocationDialog(props) {
 }
 function LocationCard(props){
   const classes = useStyles();
+  const [expanded, setExpanded] = React.useState(false);
   const { loading } = props;
 
   const handleDelete = (location_id) => {
@@ -40,10 +67,20 @@ function LocationCard(props){
     props.onClose();
   }
 
+  // Convert date format from DateTimeField format(python) to date (js)
+  const convertDate = data => {
+    let d = new Date(data);
+    return d.toLocaleString();
+  }
+
   const getGoogleLink = (placeId) => {
     const url = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id="+placeId;
     return url;
   }
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   return (
     <Card className={classes.card}>
@@ -80,25 +117,12 @@ function LocationCard(props){
             <Typography variant="body2" component="p">
               <b>Adress:</b> {props.place["formatted_address"]}
             </Typography>
-            {props.place.hasOwnProperty('international_phone_number') &&
-              <Typography variant="body2" component="p">
-              <b>Phone number:</b> {props.place["international_phone_number"]}
-              </Typography>
-            }
-            {props.place.hasOwnProperty('opening_hours') &&
-              <Typography variant="body2" component="p">
-                <b>Opening hours:</b>
-              </Typography>
-            }
-            {props.place.hasOwnProperty('opening_hours') ? (
-              props.place["opening_hours"]["weekday_text"].map((day, index) => {
-                return (
-                  <Typography variant="body2" component="p" key={index}>
-                    {day}
-                  </Typography>
-                )
-              })
-            ) : ( null )}
+            <Typography variant="body2" component="p">
+              <b>From:</b> {convertDate(props.location["startTime"])}
+            </Typography>
+            <Typography variant="body2" component="p">
+              <b>To:</b> {convertDate(props.location["endTime"])}
+            </Typography>
             <Typography variant="body2" component="p">
               <b>Number of contacts:</b> {props.location["contacts"].length}
             </Typography>
@@ -108,14 +132,59 @@ function LocationCard(props){
       {loading ? (
         null
         ) : (
-        <CardActions>
-          <Button size="small" color="primary" onClick={() => handleDelete(props.location["id"])}>
-            Delete
-          </Button>
-          <Button target="_blank" href={getGoogleLink(props.location["placeId"])} size="small" color="primary">
-            See on Google Maps
-          </Button>
-        </CardActions>
+        <React.Fragment>
+          <CardActions className={classes.cardActions} disableSpacing>
+            <Button variant="contained" size="medium" className={classes.notify}>
+              Notify
+            </Button>
+            <IconButton aria-label="delete" color="primary" onClick={() => handleDelete(props.location["id"])}>
+              <DeleteIcon/>
+            </IconButton>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              {props.place.hasOwnProperty('international_phone_number') &&
+                <Typography variant="body2" component="p">
+                <b>Phone number:</b> {props.place["international_phone_number"]}
+                </Typography>
+              }
+              {props.place.hasOwnProperty('website') &&
+                <Typography variant="body2" component="p">
+                <b>Website:</b> <a href={props.place["website"]} target="_blank">{props.place["website"]}</a>
+                </Typography>
+              }
+              {props.place.hasOwnProperty('opening_hours') &&
+                <Typography variant="body2" component="p">
+                  <b>Opening hours:</b>
+                </Typography>
+              }
+              {props.place.hasOwnProperty('opening_hours') ? (
+                props.place["opening_hours"]["weekday_text"].map((day, index) => {
+                  return (
+                    <Typography variant="body2" component="p" key={index}>
+                      {day}
+                    </Typography>
+                  )
+                })
+              ) : ( null )}
+            </CardContent>
+            <CardActions className={classes.cardActions} disableSpacing>
+              <Button target="_blank" href={getGoogleLink(props.location["placeId"])} size="small" color="primary">
+                See on Google Maps
+              </Button>
+            </CardActions>
+          </Collapse>
+      </React.Fragment>  
       )}
     </Card>
   );

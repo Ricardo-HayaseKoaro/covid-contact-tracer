@@ -132,7 +132,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-    height: '80vh',
+    height: '70vh',
   },
   fixedHeight: {
     height: 240,
@@ -146,7 +146,7 @@ const useStyles = makeStyles((theme) => ({
   flexColsScroll: {
     flexGrow: 1,
     overflow: 'auto',
-    minHeight: '80vh',
+    minHeight: '70vh',
   },
   dateInput: {
     display: 'flex',
