@@ -7,6 +7,7 @@ const GoogleMap = ({ children, ...props }) => (
         <GoogleMapReact
         bootstrapURLKeys={{
             key: "AIzaSyBD7B_F6RSNSmY9A2glFg-QDUGxAF4lO3Q",
+            libraries: ['visualization'],
         }}
         {...props}
         >

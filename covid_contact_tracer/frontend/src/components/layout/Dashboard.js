@@ -169,9 +169,15 @@ function Dashboard(props) {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
+  const handleHeatMapSwitch = () => {
+    setHeatmap(!heatmap);
+  };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -251,8 +257,8 @@ function Dashboard(props) {
                 <FormControlLabel
                   control={
                     <Switch
-                      // checked={state.checkedB}
-                      // onChange={handleChange}
+                      checked={heatmap}
+                      onChange={handleHeatMapSwitch}
                       name="check_heatmap"
                       color="primary"
                     />

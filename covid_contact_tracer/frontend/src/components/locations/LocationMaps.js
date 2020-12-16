@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import GoogleMap from '../maps/GoogleMaps';
 import {isEmpty} from "lodash"
@@ -111,6 +111,25 @@ function MarkerInfoWindow(props) {
     markers = [];
   }
 
+  //Mapping heatmap
+  let data;
+  if (props.heatmap){
+    data = props.locations.map((place) => ({
+      lat: place.latitude,
+      lng: place.longitude,
+    }));
+  }else{
+    data = [];
+  }
+  
+  const heatmapData = {
+    positions: data,
+    options: {
+      radius: 20,
+      opacity: 1,
+    },
+  };
+  
   // Centering map when click in Place icon in Timeline
   let center_location;
   if (!isEmpty(props.centerLocation)){
@@ -128,9 +147,10 @@ function MarkerInfoWindow(props) {
           defaultCenter={LOS_ANGELES_CENTER}
           onChildClick={onChildClickCallback}
           onClick={onCloseChild}
+          heatmap={heatmapData}
           center={center_location}
         >
-          {markers}
+          {props.heatmap ? [] : markers}
         </GoogleMap>
       )}
     </>
