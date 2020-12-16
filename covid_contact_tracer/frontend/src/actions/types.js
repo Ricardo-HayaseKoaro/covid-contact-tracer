@@ -20,6 +20,8 @@ export const LOADING_DETAILS = 'LOADING_DETAILS';
 export const DELETE_LOCATION = 'DELETE_LOCATION';
 export const CENTER_MAP = 'CENTER_MAP';
 export const SHOW_MAP = 'SHOW_MAP';
+export const SHOW_DIALOG = 'SHOW_DIALOG';
+
 
 
 

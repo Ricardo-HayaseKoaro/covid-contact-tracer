@@ -103,10 +103,10 @@ class UserLocationClusterViewSet(viewsets.ViewSet):
     #     return Response(place)
 
 
-# LocationCluster ViewSet - For getting all locations with cluster info (no info about users)
+# LocationCluster ViewSet - all locations with cluster info (no info about users)
 class LocationClusterViewSet(viewsets.ViewSet):
 
-    # Return user locations with clusters informations
+    # Return all locations with clusters informations
     def list(self, request):
         # Get query param
         start = self.request.query_params.get("start")
@@ -115,7 +115,7 @@ class LocationClusterViewSet(viewsets.ViewSet):
         query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end)
         # Serialize
         serializer = LocationSerializer(query, many=True)
-        # locations = getUserLocationWithCluster(self.request.user, query, serializer.data)
+        locations = getLocationWithCluster(query, serializer.data)
         return Response(locations)
 
     

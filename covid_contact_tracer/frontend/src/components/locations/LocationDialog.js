@@ -40,6 +40,11 @@ function LocationCard(props){
     props.onClose();
   }
 
+  const getGoogleLink = (placeId) => {
+    const url = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id="+placeId;
+    return url;
+  }
+
   return (
     <Card className={classes.card}>
       <CardHeader
@@ -104,11 +109,11 @@ function LocationCard(props){
         null
         ) : (
         <CardActions>
-          <Button size="small" color="primary" onClick={() => handleDelete(props.locations["id"])}>
+          <Button size="small" color="primary" onClick={() => handleDelete(props.location["id"])}>
             Delete
           </Button>
-          <Button size="small" color="primary">
-            Learn More
+          <Button target="_blank" href={getGoogleLink(props.location["placeId"])} size="small" color="primary">
+            See on Google Maps
           </Button>
         </CardActions>
       )}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION, CENTER_MAP, SHOW_MAP} from './types';
+import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION, CENTER_MAP, SHOW_MAP, SHOW_DIALOG} from './types';
 import { createMessagem, returnErrors } from './messages';
 import { tokenConfig } from './auth';
 
@@ -86,3 +86,12 @@ export const showMap = (id) => (dispatch) => {
     payload: id,
    });
 };
+
+// SHOW DIALOG 
+export const showDialog = (location, open) => (dispatch) => {
+  dispatch({ 
+    type: SHOW_DIALOG,
+    payload: {location, open},
+   });
+};
+

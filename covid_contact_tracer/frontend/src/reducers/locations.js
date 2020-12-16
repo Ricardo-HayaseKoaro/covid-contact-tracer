@@ -1,4 +1,4 @@
-import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION, CENTER_MAP, SHOW_MAP } from '../actions/types.js';
+import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION, CENTER_MAP, SHOW_MAP, SHOW_DIALOG } from '../actions/types.js';
 
 const initialState = {
     locations: [],
@@ -7,7 +7,9 @@ const initialState = {
     isLoadingDetails: false,
     place_details: {},
     centerLocation: {},
-    showLocation: null
+    showLocation: null,
+    locationDialog: null,
+    dialogOpen: false
   }
 
   export default function(state = initialState, action) {
@@ -66,6 +68,12 @@ const initialState = {
               return {
                 ...state,
                 showLocation: action.payload,
+              };
+            case SHOW_DIALOG:
+              return {
+                ...state,
+                locationDialog: action.payload.location,
+                dialogOpen: action.payload.open
               };
             default:
                 return state;

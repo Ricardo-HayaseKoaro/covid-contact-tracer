@@ -12,7 +12,7 @@ import LocationDialog from './LocationDialog';
 import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getDetails, centerMap } from '../../actions/locations';
+import { getDetails, centerMap, showMap, showDialog } from '../../actions/locations';
 import { connect } from 'react-redux';
 
 
@@ -24,52 +24,60 @@ const convertDate = data => {
 
 const mapStateToProps = state => {
   return {
-    locations: state.locations.locations
+    locations: state.locations.locations,
+    locationDialog: state.locations.locationDialog,
+    dialogOpen: state.locations.dialogOpen
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     getDetails: (placeId) => dispatch(getDetails(placeId)),
-    centerMap: (local) => dispatch(centerMap(local))
+    centerMap: (location) => dispatch(centerMap(location)),
+    showMap: (id) => dispatch(showMap(id)),
+    showDialog: (location, open) => dispatch(showDialog(location, open))
   }
 }
 
 function TimelineLocations(props) {
-  const [open, setOpen] = React.useState(false);
-  // Location that will be sent to dialog
-  const [location_dialog, setLocation] =  React.useState(null);
 
-  const handleClickOpen = (location, getDetails) => {
-    getDetails(location["placeId"]); // Place id - used by google
-    setLocation(location); // Location id - used by our application
-    setOpen(true);
+  // Open dialog
+  const handleClickOpen = (location) => {
+    props.getDetails(location["placeId"]); // Place id - used by google
+    props.showDialog(location, true);    
   };
 
+  // Center map and open location card in map
+  const handleClickIcon = (location) => {
+    props.centerMap(location); // center map in location
+    props.showMap(location["id"]); // open card 
+  };
+
+
   const handleClose = () => {
-    setOpen(false);
+    props.showDialog(props.locationDialog, false); // close dialog
   };
 
   return (
     <Timeline >
-      {props.locations.map((local) => {
+      {props.locations.map((location) => {
         return (
-          <TimelineItem key={local["id"]}>
+          <TimelineItem key={location["id"]}>
             <TimelineOppositeContent>
               <Typography>
                   <Link
                       component="button"
-                      onClick={() => handleClickOpen(local, props.getDetails)}
+                      onClick={() => handleClickOpen(location)}
                       color="inherit"
                       align="right"
                       variant="inherit"
                   >                
-                    {local["name"]}
+                    {location["name"]}
                   </Link>
               </Typography>
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <IconButton onClick={() => props.centerMap(local)} size="small">
+              <IconButton onClick={() => handleClickIcon(location)} size="small">
                 <TimelineDot>
                   <PlaceIcon style={{ fontSize: 20 }}/>
                 </TimelineDot>
@@ -80,18 +88,18 @@ function TimelineLocations(props) {
               <Typography color="textSecondary">
                 <Link
                     component="button"
-                    onClick={() => handleClickOpen(local, props.getDetails)}
+                    onClick={() => handleClickOpen(location)}
                     color="inherit"    
                     variant="inherit"
                     >                
-                    {convertDate(local["startTime"])}
+                    {convertDate(location["startTime"])}
                   </Link>
               </Typography>
             </TimelineContent>
           </TimelineItem>
         );
       })}
-      <LocationDialog location={location_dialog} open={open} onClose={handleClose}/>
+      <LocationDialog location={props.locationDialog} open={props.dialogOpen} onClose={handleClose}/>
     </Timeline>
   );
 }

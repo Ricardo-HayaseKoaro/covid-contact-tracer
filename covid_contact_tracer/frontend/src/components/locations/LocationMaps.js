@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import GoogleMap from '../maps/GoogleMaps';
 import {isEmpty} from "lodash"
+import LocationCardMap from "./LocationCardMap"
 
-import { showMap } from '../../actions/locations';
+import { showMap, getDetails, showDialog } from '../../actions/locations';
 
 import LOS_ANGELES_CENTER from './la_center';
 
@@ -12,19 +13,22 @@ const mapStateToProps = state => {
   return {
     locations: state.locations.locations,
     centerLocation: state.locations.centerLocation,
-    showLocation: state.locations.showLocation
+    showLocation: state.locations.showLocation,
+    locationDialog: state.locations.locationDialog,
+    dialogOpen: state.locations.dialogOpen
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     showMap: (id) => dispatch(showMap(id)),
+    showDialog: (location, open) => dispatch(showDialog(location, open)),
+    getDetails: (placeId) => dispatch(getDetails(placeId))
   }
 }
 
 // InfoWindow component
 const InfoWindow = (props) => {
-  const { place } = props;
   const infoWindowStyle = {
     position: 'relative',
     bottom: 150,
@@ -32,55 +36,62 @@ const InfoWindow = (props) => {
     width: 220,
     backgroundColor: 'white',
     boxShadow: '0 2px 7px 1px rgba(0, 0, 0, 0.3)',
-    padding: 10,
     fontSize: 14,
     zIndex: 100,
   };
 
   return (
     <div style={infoWindowStyle}>
-      <div style={{ fontSize: 16 }}>
-        {place.name}
-      </div>
+      <LocationCardMap place={props.place} openDialog={props.openDialog} closeDialog={props.closeDialog}></LocationCardMap>
     </div>
   );
 };
 
 // Marker component
-const Marker = ({ show, place }) => {
+const Marker = (props) => {
   const markerStyle = {
     border: '1px solid white',
     borderRadius: '50%',
     height: 10,
     width: 10,
-    backgroundColor: show==place.id ? 'red' : 'blue',
+    backgroundColor: props.show==props.place["id"] ? 'red' : 'blue',
     cursor: 'pointer',
     position: 'relative',
-    zIndex: show==place.id ? 1000 : 1,
+    zIndex: props.show==props.place["id"] ? 1000 : 1,
   };
 
   return (
     <>
       <div style={markerStyle} />
-      {show==place.id && <InfoWindow place={place} />}
+      {props.show==props.place["id"] && <InfoWindow place={props.place} openDialog={props.openDialog} closeDialog={props.closeDialog}/>}
     </>
   );
 };
 
 function MarkerInfoWindow(props) { 
 
+  // Open dialog
+  const handleOpenDialog = (location) => {
+    props.getDetails(location["placeId"]); // Place id - used by google
+    props.showDialog(location, true);    
+  };
+  
+  //Close dialog
+  const handleCloseDialog = () => {
+    props.showDialog(props.locationDialog, false); // close dialog
+  };
+
+  // Show card on map
   const onChildClickCallback = (key) => {
     props.showMap(key);
   };
 
+  //Close card on map
   const onCloseChild = () => {
     props.showMap(null);
   }
 
-  useEffect(() => {
-    props.showMap(props.centerLocation["id"]);
-  });
-
+  // Mapping markers
   let markers;
   if (!isEmpty(props.locations)) {
     markers = props.locations.map((place) => {
@@ -91,6 +102,8 @@ function MarkerInfoWindow(props) {
         lng = {place.longitude}
         show = {props.showLocation}
         place={place}
+        openDialog={handleOpenDialog}
+        closeDialog={handleCloseDialog}
       />)
     })
   }
