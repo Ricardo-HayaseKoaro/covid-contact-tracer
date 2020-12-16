@@ -16,18 +16,19 @@ const useStyles = makeStyles((theme) => ({
 const mapStateToProps = state => {
     return {
         isUploading: state.locations.isUploading,
-        isLoadindData: state.locations.isLoadindData,
+        isLoadingData: state.locations.isLoadingData,
     }
 }
 
 
 function SimpleModal(props) {
   const classes = useStyles();
- 
+  let openModal = props.isUploading || props.isLoadingData;
+
   return (
     <div>
-        <Modal open={props.isUploading || props.isLoadindData}>
-            <Backdrop className={classes.backdrop} open={props.isUploading || props.isLoadindData}>
+        <Modal open={openModal}>
+            <Backdrop className={classes.backdrop} open={openModal}>
                 <CircularProgress/>
             </Backdrop>        
       </Modal>
