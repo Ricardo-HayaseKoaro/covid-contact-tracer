@@ -61,6 +61,14 @@ function TimelineLocations(props) {
   return (
     <Timeline >
       {props.locations.map((location) => {
+        let iconColor;
+        if (location["contacts"].length > 5){
+          iconColor = "FDB606";
+        }
+        else{
+          iconColor = "primary";
+        }
+
         return (
           <TimelineItem key={location["id"]}>
             <TimelineOppositeContent>
@@ -79,7 +87,7 @@ function TimelineLocations(props) {
             <TimelineSeparator>
               <IconButton onClick={() => handleClickIcon(location)} size="small">
                 <TimelineDot>
-                  <PlaceIcon style={{ fontSize: 20 }}/>
+                  <PlaceIcon style={{ fontSize: 20, color: iconColor }}/>
                 </TimelineDot>
               </IconButton>
               <TimelineConnector />
