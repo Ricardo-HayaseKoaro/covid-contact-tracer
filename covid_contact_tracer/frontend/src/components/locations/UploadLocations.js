@@ -80,6 +80,7 @@ class UploadLocationsDialog extends Component {
                     onSave={this.handleSave.bind(this)}
                     acceptedFiles={['application/json']}
                     useChipsForPreview
+                    filesLimit={1}
                     onClose={this.handleClose.bind(this)}
                     dropzoneText={"Drag and drop your location history here or click"}
                 />

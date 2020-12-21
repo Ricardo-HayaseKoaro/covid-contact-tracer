@@ -68,11 +68,8 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         end = user_locations[-1]["endTime"]
         query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
         all_serializer = LocationSerializer(query, many=True)
-        locations, clusters = getUserLocationWithCluster(self.request.user, query, all_serializer.data)
-        response = {}
-        response["locations"] = locations
-        response["clusters"] = clusters
-        return Response(response)
+        locations = getUserLocationWithCluster(self.request.user, query, all_serializer.data)
+        return Response(locations)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -102,19 +99,14 @@ class UserLocationClusterViewSet(viewsets.ViewSet):
         # Get all locations
         query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
 
-        response = {}
         if not query:
-            response["locations"] = []
-            response["clusters"] = []
-            return Response(response)
+            return Response([])
 
         # Serialize
         serializer = LocationSerializer(query, many=True)
     
-        locations, clusters = getUserLocationWithCluster(self.request.user , query, serializer.data)
-        response["locations"] = locations
-        response["clusters"] = clusters
-        return Response(response)
+        locations = getUserLocationWithCluster(self.request.user , query, serializer.data)
+        return Response(locations)
 
 
 # LocationCluster ViewSet - all locations with cluster info (no info about users)

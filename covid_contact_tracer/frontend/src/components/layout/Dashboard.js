@@ -19,6 +19,14 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import Button from '@material-ui/core/Button';
+import Popper from '@material-ui/core/Popper';
+import Fade from '@material-ui/core/Fade';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+
 import ListItems from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
@@ -26,21 +34,18 @@ import ListLocation from '../locations/ListLocation';
 import TimelineLocations from '../locations/TimelineLocations';
 import SimpleMap from '../locations/LocationMaps';
 import Modal from './Modal';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Button from '@material-ui/core/Button';
-
+import NotificationsPopup from '../notifications/NotificationsPopup';
 import { connect } from 'react-redux';
 import { getLocations } from '../../actions/locations';
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  notifications: state.notifications.notifications,
 });
 
 const mapDispatchToProps = dispatch => {
   return {
-    getLocations: (startTime, endTime) => dispatch(getLocations(startTime, endTime))
+    getLocations: (startTime, endTime) => dispatch(getLocations(startTime, endTime)),
   }
 }
 
@@ -160,22 +165,35 @@ const useStyles = makeStyles((theme) => ({
 function Dashboard(props) {
   
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false); // For slide menu
   const [heatmap, setHeatmap] = React.useState(false);
   const [startTime, setStart] = React.useState("2017-05-24T10:30");
   const date_aux = new Date ();
   const [endTime, setEnd] = React.useState(date_aux.toISOString(Date.now()).slice(0,-8));
+  const [anchorNotification, setAnchotNotif] = React.useState(null); // Anchor for notification popper
+
+  //Notification Popper control
+  const openPopper = Boolean(anchorNotification);
+  const id = openPopper ? 'simple-popper' : undefined;
 
   const handleDrawerOpen = () => {
     setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
   };
 
   const handleHeatMapSwitch = () => {
     setHeatmap(!heatmap);
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleNotification = (event) => {
+    setAnchotNotif(anchorNotification ? null : event.currentTarget);
+  };
+
+  const handleCloseNotifications = () => {
+    setAnchotNotif(null);
   };
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -197,6 +215,22 @@ function Dashboard(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Your Timeline
           </Typography>
+          <ClickAwayListener onClickAway={handleCloseNotifications}>
+            <div>
+              <IconButton color="inherit" type="button" onClick={handleNotification}>
+                <Badge badgeContent={props.notifications.length} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <Popper id={id} open={openPopper} anchorEl={anchorNotification} transition>
+                {({ TransitionProps }) => (
+                  <Fade {...TransitionProps} timeout={100}>
+                    <NotificationsPopup notifications={props.notifications}/>
+                  </Fade>
+                )}
+              </Popper>
+            </div>
+          </ClickAwayListener>
         </Toolbar>
       </AppBar>
       <Drawer

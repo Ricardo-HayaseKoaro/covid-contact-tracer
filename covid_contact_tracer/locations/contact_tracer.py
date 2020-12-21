@@ -30,16 +30,14 @@ def getUserLocationWithCluster(user, query, data):
     for location in user_locations:
         # get locations that are in the same cluster
         list_locations_id = clusters[location["cluster_id"]]
+        location["contacts"] = []
         for other_location in list_locations_id:
             # intercts
-            if (location["startTime"] <=  other_location["endTime"] and location["endTime"] >=  other_location["startTime"]):
-                if "contacts" in location:
+            if (location["startTime"] <=  other_location["endTime"] and location["endTime"] >=  other_location["startTime"] and location["id"]!=other_location["id"] ):
                     location["contacts"].append(other_location["id"])
-                else:
-                    location["contacts"] = []
-                    location["contacts"].append(other_location["id"])
-
-    return user_locations, clusters
+    
+    
+    return user_locations
 
 
 # Query all locations, return locations with object cluster and all locations with cluster info

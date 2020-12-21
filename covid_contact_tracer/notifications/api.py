@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .utils import email_notification
 
 
-class NotificationViewSet(viewsets.ViewSet, mixins.ListModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin):
+class NotificationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin):
 
     permission_classes = [
         permissions.IsAuthenticated,
@@ -17,14 +17,17 @@ class NotificationViewSet(viewsets.ViewSet, mixins.ListModelMixin, mixins.Destro
         return self.request.user.notifications.all()
 
     def create(self, request, *args, **kwargs):
-        locations = Location.objects.filter(pk__in=[request.clusters])
+        user_location_aux = request.data["location"]
+        locations = Location.objects.filter(pk__in=user_location["contacts"])
         notifications = []
+        # User that created the notification
+        user_location = Location.objects.get(pk=user_location_aux["id"])
+        user_location.infected = True
+        notification = Notification(user=request.user, notifier=True, visualized=False, location=user_location)
+        notifications.append(notification)
         for location in locations:
             location.infected = True
-            if request.user == location.owner:
-                notification = Notification(user=location.owner, notifier=True)
-            else:
-                notification = Notification(user=location.owner, notifier=False)
+            notification = Notification(user=location.owner, notifier=False, visualized=False, location=location)
             notifications.append(notification)
         Location.objects.bulk_update(locations, ["infected"])
         Notification.objects.bulk_create(notifications)

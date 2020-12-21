@@ -2,7 +2,6 @@ import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, 
 
 const initialState = {
     locations: [],
-    clusters: [],
     isUploading: false,
     isLoadingData: false,
     isLoadingDetails: false,
@@ -13,72 +12,70 @@ const initialState = {
     dialogOpen: false
   }
 
-  export default function(state = initialState, action) {
-      switch(action.type){
-            case GET_LOCATIONS:
-              return{
-                ...state,
-                locations: action.payload.locations,
-                clusters: action.payload.clusters,
-                isLoadingData: false,
-              };
-            case DELETE_LOCATION:
-              return{
-                ...state,
-                locations: state.locations.filter((location) => location.id !== action.payload),
-              };
-            case CLEAR_LOCATIONS:
-              return {
-                ...state,
-                locations: [],
-              };
-            case UPLOAD_SUCESS:
-              return {
-                ...state,
-                locations: action.payload.locations,
-                clusters: action.payload.clusters,
-                isUploading: false,
-              };
-            case UPLOAD_FAIL:
+export default function(state = initialState, action) {
+    switch(action.type){
+          case GET_LOCATIONS:
+            return{
+              ...state,
+              locations: action.payload,
+              isLoadingData: false,
+            };
+          case DELETE_LOCATION:
+            return{
+              ...state,
+              locations: state.locations.filter((location) => location.id !== action.payload),
+            };
+          case CLEAR_LOCATIONS:
+            return {
+              ...state,
+              locations: [],
+            };
+          case UPLOAD_SUCESS:
+            return {
+              ...state,
+              locations: action.payload,
+              isUploading: false,
+            };
+          case UPLOAD_FAIL:
+            return state;
+          case UPLOADING:
+            return {
+              ...state,
+              isUploading: true,
+            };
+          case LOADING_DATA:
+            return {
+              ...state,
+              isLoadingData: true,
+            };
+          case GET_DETAILS:
+            return {
+              ...state,
+              place_details: action.payload,
+              isLoadingDetails: false,
+            };
+          case LOADING_DETAILS:
+            return {
+              ...state,
+              isLoadingDetails: true,
+            };
+          case CENTER_MAP:
+            return {
+              ...state,
+              centerLocation: action.payload,
+            };
+          case SHOW_MAP:
+            return {
+              ...state,
+              showLocation: action.payload,
+            };
+          case SHOW_DIALOG:
+            return {
+              ...state,
+              locationDialog: action.payload.location,
+              dialogOpen: action.payload.open
+            };
+          default:
               return state;
-            case UPLOADING:
-              return {
-                ...state,
-                isUploading: true,
-              };
-            case LOADING_DATA:
-              return {
-                ...state,
-                isLoadingData: true,
-              };
-            case GET_DETAILS:
-              return {
-                ...state,
-                place_details: action.payload,
-                isLoadingDetails: false,
-              };
-            case LOADING_DETAILS:
-              return {
-                ...state,
-                isLoadingDetails: true,
-              };
-            case CENTER_MAP:
-              return {
-                ...state,
-                centerLocation: action.payload,
-              };
-            case SHOW_MAP:
-              return {
-                ...state,
-                showLocation: action.payload,
-              };
-            case SHOW_DIALOG:
-              return {
-                ...state,
-                locationDialog: action.payload.location,
-                dialogOpen: action.payload.open
-              };
-            default:
-                return state;
-      }
-  }
+    }
+}

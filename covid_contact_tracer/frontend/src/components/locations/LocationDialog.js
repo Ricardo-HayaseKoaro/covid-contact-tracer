@@ -18,6 +18,7 @@ import { red } from '@material-ui/core/colors';
 
 import { connect } from 'react-redux';
 import { deleteLocation } from '../../actions/locations';
+import { notify } from '../../actions/notifications';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -53,7 +54,7 @@ function LocationDialog(props) {
   
     return (
       <Dialog aria-labelledby="simple-dialog-title" open={props.open} onClose={props.onClose}>
-         <LocationCard location={props.location} deleteLocation={props.deleteLocation} onClose={props.onClose} place={props.place_details.result} loading={props.isLoadingDetails}/>
+         <LocationCard notify={props.notify} location={props.location} deleteLocation={props.deleteLocation} onClose={props.onClose} place={props.place_details.result} loading={props.isLoadingDetails}/>
       </Dialog>
     ) 
 }
@@ -64,6 +65,11 @@ function LocationCard(props){
 
   const handleDelete = (location_id) => {
     props.deleteLocation(location_id);
+    props.onClose();
+  }
+
+  const handleNotify = (location) => {
+    props.notify(location);
     props.onClose();
   }
 
@@ -134,7 +140,7 @@ function LocationCard(props){
         ) : (
         <React.Fragment>
           <CardActions className={classes.cardActions} disableSpacing>
-            <Button variant="contained" size="medium" className={classes.notify}>
+            <Button variant="contained" size="medium" className={classes.notify} onClick={() => handleNotify(props.location)}>
               Notify
             </Button>
             <IconButton aria-label="delete" color="primary" onClick={() => handleDelete(props.location["id"])}>
@@ -193,12 +199,13 @@ function LocationCard(props){
 const mapStateToProps = state => {
   return {
     isLoadingDetails: state.locations.isLoadingDetails,
-    place_details: state.locations.place_details
+    place_details: state.locations.place_details,
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    deleteLocation: (location_id) => dispatch(deleteLocation(location_id))
+    deleteLocation: (location_id) => dispatch(deleteLocation(location_id)),
+    notify: (location) => dispatch(notify(location)),
   }
 }
 

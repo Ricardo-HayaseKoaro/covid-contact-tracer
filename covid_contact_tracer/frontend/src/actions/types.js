@@ -21,6 +21,17 @@ export const DELETE_LOCATION = 'DELETE_LOCATION';
 export const CENTER_MAP = 'CENTER_MAP';
 export const SHOW_MAP = 'SHOW_MAP';
 export const SHOW_DIALOG = 'SHOW_DIALOG';
+export const NOTIFY = 'NOTIFY';
+export const NOTIFY_FAIL = 'NOTIFY_FAIL';
+export const GET_NOTIFICATIONS = "GET_NOTIFICATIONS";
+export const DELETE_NOTIFICATIONS = "DELETE_NOTIFICATIONS";
+export const NOTIFICATION_FAIL = "NOTIFICATION_FAIL";
+export const NOTIFYING = "NOTIFYING";
+
+
+
+
+
 
 
 
