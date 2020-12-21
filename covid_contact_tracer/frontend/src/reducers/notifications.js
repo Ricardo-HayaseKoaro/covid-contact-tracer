@@ -1,4 +1,4 @@
-import { NOTIFY, NOTIFY_FAIL, GET_NOTIFICATIONS, DELETE_NOTIFICATIONS, NOTIFYING } from '../actions/types';
+import { NOTIFY, NOTIFY_FAIL, GET_NOTIFICATIONS, DELETE_NOTIFICATIONS, NOTIFYING, NOTIFICATION_FAIL } from '../actions/types';
 
 const initialState = {
   notifications: [],
@@ -21,7 +21,7 @@ export default function (state = initialState, action) {
         notifications: action.payload,
       }
     case DELETE_NOTIFICATIONS:
-      return{
+      return {
         ...state,
         notifications: state.notifications.filter((notification) => notification.id !== action.payload),
       };
@@ -29,6 +29,10 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isNotifying: true
+      }
+    case NOTIFICATION_FAIL:
+      return {
+        ...state,Í
       }
     default:
       return state;
