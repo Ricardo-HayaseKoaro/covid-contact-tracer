@@ -3,43 +3,25 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import GridList from '@material-ui/core/GridList';
-import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Button from '@material-ui/core/Button';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import ListItems from './listItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import ListLocation from '../locations/ListLocation';
-import TimelineLocations from '../locations/TimelineLocations';
-import SimpleMap from '../locations/LocationMaps';
-import Modal from './Modal';
 import NotificationsPopup from '../notifications/NotificationsPopup';
 import { connect } from 'react-redux';
 import { getLocations } from '../../actions/locations';
 
 const mapStateToProps = (state) => ({
-  auth: state.auth,
   notifications: state.notifications.notifications,
 });
 
@@ -47,19 +29,6 @@ const mapDispatchToProps = dispatch => {
   return {
     getLocations: (startTime, endTime) => dispatch(getLocations(startTime, endTime)),
   }
-}
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
 }
 
 const drawerWidth = 240;
@@ -166,10 +135,6 @@ function Dashboard(props) {
   
   const classes = useStyles();
   const [open, setOpen] = React.useState(false); // For slide menu
-  const [heatmap, setHeatmap] = React.useState(false);
-  const [startTime, setStart] = React.useState("2017-05-24T10:30");
-  const date_aux = new Date ();
-  const [endTime, setEnd] = React.useState(date_aux.toISOString(Date.now()).slice(0,-8));
   const [anchorNotification, setAnchotNotif] = React.useState(null); // Anchor for notification popper
 
   //Notification Popper control
@@ -182,10 +147,6 @@ function Dashboard(props) {
 
   const handleDrawerClose = () => {
     setOpen(false);
-  };
-
-  const handleHeatMapSwitch = () => {
-    setHeatmap(!heatmap);
   };
 
   const handleNotification = (event) => {
@@ -248,69 +209,7 @@ function Dashboard(props) {
         <Divider />
         <ListItems/> 
       </Drawer>
-      <main className={classes.content}>
-        <Modal/>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <Box className={classes.dateInput}>
-                  <TextField
-                      id="datetime-local-start"
-                      label="Start time"
-                      type="datetime-local"
-                      value={startTime}                      
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      onChange={event => setStart(event.target.value)}
-                    />
-                  <TextField
-                      id="datetime-local-end"
-                      label="End time"
-                      type="datetime-local"
-                      defaultValue={endTime}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      onChange={event => setEnd(event.target.value)}
-                    />
-                    <Box marginTop="15px">
-                      <Button variant="outlined" color="primary" onClick={() => props.getLocations(startTime, endTime)}>
-                        Load
-                      </Button>
-                    </Box>
-              </Box>
-              <br/>
-              <Paper className={classes.paper} >
-                <TimelineLocations />
-              </Paper>
-            </Grid>
-             <Grid item xs={12} sm={6}>
-              <Box className={classes.dateInput}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={heatmap}
-                      onChange={handleHeatMapSwitch}
-                      name="check_heatmap"
-                      color="primary"
-                    />
-                  }
-                  label="View Heatmap"
-                />
-              </Box>
-              <br/>
-              <Paper className={classes.paper} >
-                  <SimpleMap heatmap={heatmap}/>
-                </Paper>
-              </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
+      {props.children}
     </div>
   );
 }

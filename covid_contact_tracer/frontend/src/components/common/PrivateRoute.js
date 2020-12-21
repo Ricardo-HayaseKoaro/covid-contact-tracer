@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Loading from './Loading';
+import Dashboard from '../layout/Dashboard';
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route
@@ -12,7 +13,11 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
       } else if (!auth.isAuthenticated) {
         return <Redirect to="/login" />;
       } else {
-        return <Component {...props} />;
+        return(
+          <Dashboard>
+            <Component {...props} />
+          </Dashboard>
+        );
       }
     }}
   />
