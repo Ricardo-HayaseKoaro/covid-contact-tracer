@@ -9,3 +9,5 @@ class Location(models.Model):
     startTime = models.DateTimeField()
     endTime = models.DateTimeField()
     owner = models.ForeignKey(User, related_name="locations", on_delete=models.CASCADE, null=True)
+    infected = models.BooleanField()
+    

@@ -45,7 +45,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
     def create(self, request, *args, **kwargs):
         # Create a list of dict with valid key - value for location model
         locations = request.data["timelineObjects"]
-        resp = []
+        user_locations = []
         for local in locations:
             if "placeVisit" in local:
                 new_local = dict()
@@ -57,11 +57,22 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
                 new_local["startTime"] =  datetime.datetime.utcfromtimestamp(epoch).replace(tzinfo=datetime.timezone.utc)
                 epoch = int(local["placeVisit"]["duration"]["endTimestampMs"])/1000
                 new_local["endTime"] = datetime.datetime.utcfromtimestamp(epoch).replace(tzinfo=datetime.timezone.utc)
+                new_local["infected"] = False
                 serializer = self.get_serializer(data=new_local)
                 serializer.is_valid(raise_exception=True)
                 self.perform_create(serializer)
-                resp.append(serializer.data)
-        return Response(resp)
+                user_locations.append(serializer.data)
+        
+        # get contacts
+        start = user_locations[0]["startTime"]
+        end = user_locations[-1]["endTime"]
+        query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
+        all_serializer = LocationSerializer(query, many=True)
+        locations, clusters = getUserLocationWithCluster(self.request.user, query, all_serializer.data)
+        response = {}
+        response["locations"] = locations
+        response["clusters"] = clusters
+        return Response(response)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -90,17 +101,20 @@ class UserLocationClusterViewSet(viewsets.ViewSet):
         end = self.request.query_params.get("end")
         # Get all locations
         query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
+
+        response = {}
+        if not query:
+            response["locations"] = []
+            response["clusters"] = []
+            return Response(response)
+
         # Serialize
         serializer = LocationSerializer(query, many=True)
-        locations = getUserLocationWithCluster(self.request.user, query, serializer.data)
-        return Response(locations)
-
-    # Noctify system that user is 
-    # @action(methods=['get'], detail=True)
-    # def place_details(self, request, pk=None):
-    #     gmaps = googlemaps.Client(key=config("GOOGLE_API_KEY"))
-    #     place = gmaps.place(place_id=pk)
-    #     return Response(place)
+    
+        locations, clusters = getUserLocationWithCluster(self.request.user , query, serializer.data)
+        response["locations"] = locations
+        response["clusters"] = clusters
+        return Response(response)
 
 
 # LocationCluster ViewSet - all locations with cluster info (no info about users)

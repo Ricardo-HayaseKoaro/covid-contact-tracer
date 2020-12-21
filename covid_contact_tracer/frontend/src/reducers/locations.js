@@ -2,6 +2,7 @@ import { GET_LOCATIONS, CLEAR_LOCATIONS, UPLOAD_SUCESS, UPLOAD_FAIL, UPLOADING, 
 
 const initialState = {
     locations: [],
+    clusters: [],
     isUploading: false,
     isLoadingData: false,
     isLoadingDetails: false,
@@ -17,7 +18,8 @@ const initialState = {
             case GET_LOCATIONS:
               return{
                 ...state,
-                locations: action.payload,
+                locations: action.payload.locations,
+                clusters: action.payload.clusters,
                 isLoadingData: false,
               };
             case DELETE_LOCATION:
@@ -33,7 +35,8 @@ const initialState = {
             case UPLOAD_SUCESS:
               return {
                 ...state,
-                locations: state.locations.concat(action.payload),
+                locations: action.payload.locations,
+                clusters: action.payload.clusters,
                 isUploading: false,
               };
             case UPLOAD_FAIL:

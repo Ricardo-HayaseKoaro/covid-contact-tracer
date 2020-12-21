@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django_filters',
     'knox',
     'accounts',
+    'notifications'
 ]
 
 MIDDLEWARE = [
