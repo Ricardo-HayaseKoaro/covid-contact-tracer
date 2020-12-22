@@ -58,6 +58,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
                 epoch = int(local["placeVisit"]["duration"]["endTimestampMs"])/1000
                 new_local["endTime"] = datetime.datetime.utcfromtimestamp(epoch).replace(tzinfo=datetime.timezone.utc)
                 new_local["infected"] = False
+                new_local["notified"] = False
                 serializer = self.get_serializer(data=new_local)
                 serializer.is_valid(raise_exception=True)
                 self.perform_create(serializer)

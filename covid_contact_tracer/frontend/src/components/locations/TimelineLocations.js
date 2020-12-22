@@ -8,9 +8,11 @@ import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import Typography from '@material-ui/core/Typography';
 import PlaceIcon from '@material-ui/icons/Place';
+import WarningIcon from '@material-ui/icons/Warning';
 import LocationDialog from './LocationDialog';
 import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
+import Box from '@material-ui/core/Box';
 
 import { getDetails, centerMap, showMap, showDialog } from '../../actions/locations';
 import { connect } from 'react-redux';
@@ -44,7 +46,7 @@ function TimelineLocations(props) {
   // Open dialog
   const handleClickOpen = (location) => {
     props.getDetails(location["placeId"]); // Place id - used by google
-    props.showDialog(location, true);    
+    props.showDialog(location, true);
   };
 
   // Center map and open location card in map
@@ -62,32 +64,44 @@ function TimelineLocations(props) {
     <Timeline >
       {props.locations.map((location) => {
         let iconColor;
-        if (location["contacts"].length > 5){
-          iconColor = "FDB606";
+        let txtColor;
+        if (location["infected"]) {
+          iconColor = "E30808";
+          txtColor = "error";
         }
-        else{
-          iconColor = "primary";
+        else if (location["contacts"].length > 5) {
+          iconColor = "FDB606";
+          txtColor = "inherit";
+        }
+        else {
+          txtColor = "inherit";
+          iconColor = "#3f51b5";
         }
 
         return (
           <TimelineItem key={location["id"]}>
             <TimelineOppositeContent>
               <Typography>
-                  <Link
-                      component="button"
-                      onClick={() => handleClickOpen(location)}
-                      color="inherit"
-                      align="right"
-                      variant="inherit"
-                  >                
+                <Link
+                  component="button"
+                  onClick={() => handleClickOpen(location)}
+                  color={txtColor}
+                  align="right"
+                  variant="inherit"
+                >
+                  <Box fontWeight="fontWeightMedium">
                     {location["name"]}
-                  </Link>
+                  </Box>
+                </Link>
               </Typography>
             </TimelineOppositeContent>
             <TimelineSeparator>
               <IconButton onClick={() => handleClickIcon(location)} size="small">
                 <TimelineDot>
-                  <PlaceIcon style={{ fontSize: 20, color: iconColor }}/>
+                  {location.infected ?
+                    <WarningIcon style={{ fontSize: 20, color: iconColor }} /> :
+                    <PlaceIcon style={{ fontSize: 20, color: iconColor }} />
+                  }
                 </TimelineDot>
               </IconButton>
               <TimelineConnector />
@@ -95,19 +109,24 @@ function TimelineLocations(props) {
             <TimelineContent>
               <Typography color="textSecondary">
                 <Link
-                    component="button"
-                    onClick={() => handleClickOpen(location)}
-                    color="inherit"    
-                    variant="inherit"
-                    >                
-                    {convertDate(location["startTime"])}
-                  </Link>
+                  component="button"
+                  onClick={() => handleClickOpen(location)}
+                  color="inherit"
+                  variant="inherit"
+                >
+                  {convertDate(location["startTime"])}
+                  {location["notified"] &&
+                    <Typography color="textSecondary">
+                      You notified this place
+                  </Typography>
+                  }
+                </Link>
               </Typography>
             </TimelineContent>
           </TimelineItem>
         );
       })}
-      <LocationDialog location={props.locationDialog} open={props.dialogOpen} onClose={handleClose}/>
+      <LocationDialog location={props.locationDialog} open={props.dialogOpen} onClose={handleClose} />
     </Timeline>
   );
 }

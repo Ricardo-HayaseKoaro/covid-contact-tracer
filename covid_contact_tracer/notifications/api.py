@@ -18,11 +18,16 @@ class NotificationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins
 
     def create(self, request, *args, **kwargs):
         user_location_aux = request.data["location"]
-        locations = Location.objects.filter(pk__in=user_location["contacts"])
+        locations = Location.objects.filter(pk__in=user_location_aux["contacts"])
         notifications = []
         # User that created the notification
         user_location = Location.objects.get(pk=user_location_aux["id"])
+        # Check if the user has already notified this place
+        if user_location.notified == True:
+            return Response({message: "Location already notified"})
         user_location.infected = True
+        user_location.notified = True
+        user_location.save()
         notification = Notification(user=request.user, notifier=True, visualized=False, location=user_location)
         notifications.append(notification)
         for location in locations:

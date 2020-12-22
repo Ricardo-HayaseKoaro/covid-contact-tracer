@@ -183,9 +183,9 @@ function Dashboard(props) {
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
-              <Popper id={id} open={openPopper} anchorEl={anchorNotification} transition>
+              <Popper id={id} open={openPopper} anchorEl={anchorNotification} style={{zIndex: 10000, marginRight: "1vw",}} transition placement="bottom-start">
                 {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={100}>
+                  <Fade {...TransitionProps} timeout={0}>
                     <NotificationsPopup notifications={props.notifications}/>
                   </Fade>
                 )}

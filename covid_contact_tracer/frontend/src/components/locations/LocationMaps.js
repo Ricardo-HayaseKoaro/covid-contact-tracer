@@ -3,10 +3,13 @@ import { connect } from 'react-redux';
 import GoogleMap from '../maps/GoogleMaps';
 import {isEmpty} from "lodash"
 import LocationCardMap from "./LocationCardMap"
+import PlaceIcon from '@material-ui/icons/Place';
+import WarningIcon from '@material-ui/icons/Warning';
 
 import { showMap, getDetails, showDialog } from '../../actions/locations';
 
 import LOS_ANGELES_CENTER from './la_center';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 //Redux mapping
 const mapStateToProps = state => {
@@ -49,23 +52,37 @@ const InfoWindow = (props) => {
 
 // Marker component
 const Marker = (props) => {
+
+  let infected = props.place["infected"];
+  let zIndexControl;
+  if (infected) {
+    zIndexControl = 50;
+  }
   const markerStyle = {
-    border: '1px solid white',
-    borderRadius: '50%',
-    height: 10,
-    width: 10,
-    backgroundColor: props.show==props.place["id"] ? 'red' : 'blue',
+    height: 20,
+    width: 20,
+    color: infected ? 'red' : '#3f51b5',
     cursor: 'pointer',
     position: 'relative',
-    zIndex: props.show==props.place["id"] ? 1000 : 1,
+    zIndex: zIndexControl,
   };
 
-  return (
-    <>
-      <div style={markerStyle} />
-      {props.show==props.place["id"] && <InfoWindow place={props.place} openDialog={props.openDialog} closeDialog={props.closeDialog}/>}
-    </>
-  );
+  if (infected) {
+    return (
+      <>
+        <WarningIcon style={markerStyle} />
+        {props.show==props.place["id"] && <InfoWindow place={props.place} openDialog={props.openDialog} closeDialog={props.closeDialog}/>}
+      </>
+    );
+  } else {
+    return (
+      <>
+        <PlaceIcon style={markerStyle} />
+        {props.show==props.place["id"] && <InfoWindow place={props.place} openDialog={props.openDialog} closeDialog={props.closeDialog}/>}
+      </>
+    );
+  }
+  
 };
 
 function MarkerInfoWindow(props) { 

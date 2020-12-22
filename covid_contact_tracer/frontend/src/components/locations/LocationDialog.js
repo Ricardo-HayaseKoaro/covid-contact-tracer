@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -14,6 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Collapse from '@material-ui/core/Collapse';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import WarningIcon from '@material-ui/icons/Warning';
 import { red } from '@material-ui/core/colors';
 
 import { connect } from 'react-redux';
@@ -70,6 +71,8 @@ function LocationCard(props){
 
   const handleNotify = (location) => {
     props.notify(location);
+    location["infected"] = true;
+    location["notified"] = true;
     props.onClose();
   }
 
@@ -87,6 +90,14 @@ function LocationCard(props){
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  let warningText = "";
+  if (props.location["notified"]){
+    warningText = "You notified this place as a possible COVID-19 infected. We recommend that you scrupulously follow the instructions provided by the health authorities.";
+  }
+  else if (props.location["infected"]) {
+    warningText = "It is possible that you come in contact with someone who has experienced COVID-19-like symptoms. We recommend that you scrupulously follow the instructions provided by the health authorities and check for COVID-19 symptons.";
+  }
 
   return (
     <Card className={classes.card}>
@@ -120,6 +131,15 @@ function LocationCard(props){
           </React.Fragment>
         ) : (
           <React.Fragment>
+            {props.location["infected"] &&
+              <React.Fragment>
+                  <Typography variant="subtitle2" component="p">
+                    <WarningIcon style={{ color: red[500] }}/>
+                    {warningText}
+                  </Typography>
+                <br></br>
+              </React.Fragment>
+            }
             <Typography variant="body2" component="p">
               <b>Adress:</b> {props.place["formatted_address"]}
             </Typography>
@@ -140,9 +160,15 @@ function LocationCard(props){
         ) : (
         <React.Fragment>
           <CardActions className={classes.cardActions} disableSpacing>
-            <Button variant="contained" size="medium" className={classes.notify} onClick={() => handleNotify(props.location)}>
-              Notify
-            </Button>
+            {props.location["notified"] ? 
+              <Button variant="contained" size="medium" className={classes.notify} disabled>
+                Already notified
+              </Button>
+              :
+              <Button variant="contained" size="medium" className={classes.notify} onClick={() => handleNotify(props.location)}>
+                Notify
+              </Button>
+            }
             <IconButton aria-label="delete" color="primary" onClick={() => handleDelete(props.location["id"])}>
               <DeleteIcon/>
             </IconButton>

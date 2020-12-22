@@ -12,14 +12,21 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         maxWidth: '36ch',
         backgroundColor: grey[300],
-        cursor: "pointer",
-        '&:hover': {
-            backgroundColor: grey[200],
-          },
+        borderRadius: "10px",
+        position: 'relative',
+        overflow: 'auto',
+        maxHeight: '90vh',
     },
     inline: {
         display: 'inline',
     },
+    notification: {
+        borderRadius: "10px",
+        cursor: "pointer",
+        '&:hover': {
+            backgroundColor: grey[200],
+          },
+    }
 }));
 
 export default function notifications(props) {
@@ -30,7 +37,7 @@ export default function notifications(props) {
             {props.notifications.map((notification) => {
                 return (
                     <React.Fragment>
-                        <ListItem alignItems="flex-start" key={notification["id"]}>
+                        <ListItem alignItems="flex-start" key={notification["id"]}  className={classes.notification}>
                             <ListItemText
                                 primary="Contact Alert"
                                 secondary={
