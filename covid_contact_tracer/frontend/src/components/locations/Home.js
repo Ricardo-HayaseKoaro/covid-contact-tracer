@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'auto',
     },
     container: {
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4),
+        paddingTop: theme.spacing(7),
+        paddingBottom: theme.spacing(3),
     },
     paper: {
         padding: theme.spacing(2),
@@ -75,7 +75,6 @@ function HomePage(props) {
     };
 
     return (
-
         <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3} className={classes.wrapper}>
                 <Grid item xs={12} sm={6} className={classes.timeLineWrapper}>
