@@ -237,7 +237,7 @@ function Dashboard(props) {
         <Modal />
         <div className={classes.appBarSpacer} />
         {props.children}
-        <Box pt={4}>
+        <Box pt={2}>
           <Copyright />
         </Box>
       </main>
