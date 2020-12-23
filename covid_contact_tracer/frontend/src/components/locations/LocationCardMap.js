@@ -52,7 +52,7 @@ export default function LocationCardMap(props) {
         <br/>
         {props.place["infected"] &&
           <React.Fragment>
-            <Typography variant="body2" component="p">
+            <Typography variant="body2">
               <WarningIcon style={{ color: red[500] }} />
                 Alert possible contact with COVID-19 infected
             </Typography>

@@ -1,4 +1,4 @@
-import { NOTIFY, NOTIFY_FAIL, GET_NOTIFICATIONS, DELETE_NOTIFICATIONS, NOTIFYING, NOTIFICATION_FAIL } from '../actions/types';
+import { NOTIFY, NOTIFY_FAIL, GET_NOTIFICATIONS, DELETE_NOTIFICATIONS, NOTIFYING, NOTIFICATION_FAIL, VISUALIZE_NOTIFICATION } from '../actions/types';
 
 const initialState = {
   notifications: [],
@@ -32,7 +32,11 @@ export default function (state = initialState, action) {
       }
     case NOTIFICATION_FAIL:
       return {
-        ...state,Í
+        ...state, 
+      }
+    case VISUALIZE_NOTIFICATION:
+      return {
+        ...state,
       }
     default:
       return state;

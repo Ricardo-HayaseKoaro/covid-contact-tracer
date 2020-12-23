@@ -7,6 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { grey } from '@material-ui/core/colors';
 
+import { Link } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         cursor: "pointer",
         '&:hover': {
             backgroundColor: grey[200],
-          },
+        },
     }
 }));
 
@@ -34,27 +36,27 @@ export default function notifications(props) {
 
     return (
         <List className={classes.root}>
-            {props.notifications.map((notification) => {
+            {props.notifications.filter((notification) => !notification.visualized).map((notification) => {
                 return (
-                    <React.Fragment>
-                        <ListItem alignItems="flex-start" key={notification["id"]}  className={classes.notification}>
-                            <ListItemText
-                                primary="Contact Alert"
-                                secondary={
-                                    <React.Fragment>
-                                        <Typography
-                                            component="span"
-                                            variant="body2"
-                                            className={classes.inline}
-                                            color="textPrimary"
-                                        >
-                                        {notification.location["name"]}
-                            </Typography>
-                                        {" - You were potentially exposed to an infected person"}
-                                    </React.Fragment>
-                                }
-                            />
-                        </ListItem>
+                    <React.Fragment key={notification["id"]}>
+                            <ListItem  alignItems="flex-start" onClick={() => notification["visualized"]=true} button component={Link} to={{ pathname: "/notifications", search: "?id="+notification["id"] }}  className={classes.notification}>
+                                <ListItemText
+                                    primary="Contact Alert"
+                                    secondary={
+                                        <React.Fragment>
+                                            <Typography
+                                                component="span"
+                                                variant="body2"
+                                                className={classes.inline}
+                                                color="textPrimary"
+                                            >
+                                                {notification.location["name"]}
+                                            </Typography>
+                                            {" - You were potentially exposed to an infected person"}
+                                        </React.Fragment>
+                                    }
+                                />
+                            </ListItem>
                         <Divider component="li" />
                     </React.Fragment>
                 )

@@ -198,19 +198,19 @@ function Dashboard(props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Your Timeline
+            {props.children.type.displayName.match(/\(([^)]+)\)/)[1]}
           </Typography>
           <ClickAwayListener onClickAway={handleCloseNotifications}>
             <div>
               <IconButton color="inherit" type="button" onClick={handleNotification}>
-                <Badge badgeContent={props.notifications.length} color="secondary">
+                <Badge badgeContent={props.notifications.filter((notification) => !notification.visualized).length} color="secondary">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
               <Popper id={id} open={openPopper} anchorEl={anchorNotification} style={{ zIndex: 10000, marginRight: "1vw", }} transition placement="bottom-start">
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={0}>
-                    <NotificationsPopup notifications={props.notifications} />
+                    <NotificationsPopup notifications={props.notifications} handleClose={() => { handleCloseNotifications() }}/>
                   </Fade>
                 )}
               </Popper>

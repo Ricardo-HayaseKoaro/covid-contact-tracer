@@ -9,6 +9,7 @@ import {
   DELETE_NOTIFICATIONS,
   NOTIFYING,
   NOTIFICATION_FAIL,
+  VISUALIZE_NOTIFICATION,
 } from './types';
 
 // CREATE NOTIFICATION
@@ -16,14 +17,6 @@ import {
 export const notify = (location) => (dispatch, getState) => {
 
     dispatch({ type: NOTIFYING });
-
-    // Headers
-    const config = {
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    };
-
 
     // Request Body
     const body = JSON.stringify({ location });
@@ -70,6 +63,27 @@ export const deleteNotifications = (id) => (dispatch, getState) => {
     .then((res) => {
         dispatch({
         type: DELETE_NOTIFICATIONS,
+        payload: res.data,
+        });
+    })
+    .catch((err) => {
+        dispatch(returnErrors(err.response.data, err.response.status));
+        dispatch({
+        type: NOTIFICATION_FAIL,
+        });
+    });
+};
+
+// VISUALIZE NOTIFICATION
+export const visualizeNotification = (notification) => (dispatch, getState) => {
+
+    const body = JSON.stringify({ visualized: notification.visualized });
+
+    axios
+    .patch('/api/notifications/'+notification["id"]+'/', body, tokenConfig(getState))
+    .then((res) => {
+        dispatch({
+        type: VISUALIZE_NOTIFICATION,
         payload: res.data,
         });
     })

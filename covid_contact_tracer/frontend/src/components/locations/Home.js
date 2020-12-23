@@ -135,4 +135,5 @@ function HomePage(props) {
         </Container>
     );
 }
+HomePage.displayName = "Your Timeline";
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
