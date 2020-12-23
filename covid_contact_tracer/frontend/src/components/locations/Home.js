@@ -8,12 +8,9 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 
 import TimelineLocations from './TimelineLocations';
 import SimpleMap from './LocationMaps';
-import Modal from '../layout/Modal';
 import { connect } from 'react-redux';
 import { getLocations } from '../../actions/locations';
 
@@ -25,19 +22,6 @@ const mapDispatchToProps = dispatch => {
     return {
         getLocations: (startTime, endTime) => dispatch(getLocations(startTime, endTime)),
     }
-}
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-        </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -92,71 +76,65 @@ function HomePage(props) {
     };
 
     return (
-        <main className={classes.content}>
-            <Modal />
-            <div className={classes.appBarSpacer} />
-            <Container maxWidth="lg" className={classes.container}>
-                <Grid container spacing={3} className={classes.wrapper}>
-                    <Grid item xs={12} sm={6} className={classes.timeLineWrapper}>
-                        <Box className={classes.dateInput}>
-                            <TextField
-                                id="datetime-local-start"
-                                label="Start time"
-                                type="datetime-local"
-                                value={startTime}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                onChange={event => setStart(event.target.value)}
-                            />
-                            <TextField
-                                id="datetime-local-end"
-                                label="End time"
-                                type="datetime-local"
-                                defaultValue={endTime}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                onChange={event => setEnd(event.target.value)}
-                            />
-                            <Box marginTop="15px">
-                                <Button variant="outlined" color="primary" onClick={() => props.getLocations(startTime, endTime)}>
-                                    Load
+
+        <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3} className={classes.wrapper}>
+                <Grid item xs={12} sm={6} className={classes.timeLineWrapper}>
+                    <Box className={classes.dateInput}>
+                        <TextField
+                            id="datetime-local-start"
+                            label="Start time"
+                            type="datetime-local"
+                            value={startTime}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            onChange={event => setStart(event.target.value)}
+                        />
+                        <TextField
+                            id="datetime-local-end"
+                            label="End time"
+                            type="datetime-local"
+                            defaultValue={endTime}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            onChange={event => setEnd(event.target.value)}
+                        />
+                        <Box marginTop="15px">
+                            <Button variant="outlined" color="primary" onClick={() => props.getLocations(startTime, endTime)}>
+                                Load
                       </Button>
-                            </Box>
                         </Box>
-                        <br />
-                        <Paper className={classes.paper} >
-                            <Box maxWidth="fit-content">
-                            <TimelineLocations className={classes.timeLine}/>
-                            </Box>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Box className={classes.switch}>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={heatmap}
-                                        onChange={handleHeatMapSwitch}
-                                        name="check_heatmap"
-                                        color="primary"
-                                    />
-                                }
-                                label="View Heatmap"
-                            />
+                    </Box>
+                    <br />
+                    <Paper className={classes.paper} >
+                        <Box maxWidth="fit-content">
+                            <TimelineLocations className={classes.timeLine} />
                         </Box>
-                        <br />
-                        <Paper className={classes.paper} >
-                            <SimpleMap heatmap={heatmap} />
-                        </Paper>
-                    </Grid>
+                    </Paper>
                 </Grid>
-                <Box pt={4}>
-                    <Copyright />
-                </Box>
-            </Container>
-        </main>
+                <Grid item xs={12} sm={6}>
+                    <Box className={classes.switch}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={heatmap}
+                                    onChange={handleHeatMapSwitch}
+                                    name="check_heatmap"
+                                    color="primary"
+                                />
+                            }
+                            label="View Heatmap"
+                        />
+                    </Box>
+                    <br />
+                    <Paper className={classes.paper} >
+                        <SimpleMap heatmap={heatmap} />
+                    </Paper>
+                </Grid>
+            </Grid>
+        </Container>
     );
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

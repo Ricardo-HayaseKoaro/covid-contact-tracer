@@ -14,6 +14,10 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
+import Modal from '../layout/Modal';
+import Link from '@material-ui/core/Link';
+import Box from '@material-ui/core/Box';
+
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import ListItems from './listItems';
@@ -118,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     minHeight: 0,
   },
-  
+
   flexColsScroll: {
     flexGrow: 1,
     overflow: 'auto',
@@ -133,8 +137,21 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+function Copyright() {
+  return (
+      <Typography variant="body2" color="textSecondary" align="center">
+          {'Copyright © '}
+          <Link color="inherit" href="https://material-ui.com/">
+              Your Website
+      </Link>{' '}
+          {new Date().getFullYear()}
+          {'.'}
+      </Typography>
+  );
+}
+
 function Dashboard(props) {
-  
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(false); // For slide menu
   const [anchorNotification, setAnchotNotif] = React.useState(null); // Anchor for notification popper
@@ -190,10 +207,10 @@ function Dashboard(props) {
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
-              <Popper id={id} open={openPopper} anchorEl={anchorNotification} style={{zIndex: 10000, marginRight: "1vw",}} transition placement="bottom-start">
+              <Popper id={id} open={openPopper} anchorEl={anchorNotification} style={{ zIndex: 10000, marginRight: "1vw", }} transition placement="bottom-start">
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={0}>
-                    <NotificationsPopup notifications={props.notifications}/>
+                    <NotificationsPopup notifications={props.notifications} />
                   </Fade>
                 )}
               </Popper>
@@ -214,9 +231,16 @@ function Dashboard(props) {
           </IconButton>
         </div>
         <Divider />
-        <ListItems/> 
+        <ListItems />
       </Drawer>
-      {props.children}
+      <main className={classes.content}>
+        <Modal />
+        <div className={classes.appBarSpacer} />
+        {props.children}
+        <Box pt={4}>
+          <Copyright />
+        </Box>
+      </main>
     </div>
   );
 }
