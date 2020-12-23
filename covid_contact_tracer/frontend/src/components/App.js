@@ -7,6 +7,7 @@ import Login from './accounts/Login';
 import Register from './accounts/Register';
 import Alerts from './layout/Alerts';
 import PrivateRoute from './common/PrivateRoute';
+import NotificationsList from './notifications/NotificationsList';
 
 import { Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -35,6 +36,7 @@ class App extends Component {
                         <Alerts />
                         <Switch>
                             <PrivateRoute exact path="/" component={HomePage} />
+                            <PrivateRoute exact path="/notifications" component={NotificationsList} />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/register" component={Register} />
                         </Switch>

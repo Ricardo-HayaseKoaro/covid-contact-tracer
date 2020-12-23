@@ -27,18 +27,18 @@ const mapStateToProps = state => {
 function listItems(props) {
 return (
   <List>
-    <ListItem button>
+      <ListItem button component={Link} to="/">
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Your Timeline" />
       </ListItem>
       <UploadLocations/>
-      <ListItem button>
+      <ListItem button component={Link} to="/notifications">
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText primary="Reports" />
+        <ListItemText primary="Notifications" />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
