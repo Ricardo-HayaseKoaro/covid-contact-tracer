@@ -1,14 +1,16 @@
 from notifications.models import Notification
 from locations.models import Location
-from rest_framework import viewsets, permissions, mixins
+from rest_framework import viewsets, mixins
 from .serializers import NotificationSerializer
 from rest_framework.response import Response
 from .utils import email_notification
+from .permission import IsOwner
+from rest_framework import permissions
 
-
-class NotificationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin):
+class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.ListModelMixin):
 
     permission_classes = [
+        IsOwner,
         permissions.IsAuthenticated,
     ]
     serializer_class = NotificationSerializer

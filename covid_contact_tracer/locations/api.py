@@ -1,6 +1,6 @@
 from locations.models import Location
 from rest_framework.decorators import action
-from rest_framework import viewsets, permissions, mixins
+from rest_framework import viewsets, mixins
 from .serializers import LocationSerializer
 from rest_framework.response import Response
 from django_filters import rest_framework as filters
@@ -9,6 +9,8 @@ import datetime
 import googlemaps
 from decouple import config
 from .contact_tracer import getUserLocationWithCluster
+from .permission import IsOwner
+from rest_framework import permissions
 
 #Location Filter
 class LocationFilter(filters.FilterSet):
@@ -35,6 +37,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
     
     permission_classes = [
         permissions.IsAuthenticated,
+        IsOwner,
     ]
     serializer_class = LocationSerializer
     filterset_class = LocationFilter
@@ -90,6 +93,7 @@ class UserLocationClusterViewSet(viewsets.ViewSet):
 
     permission_classes = [
         permissions.IsAuthenticated,
+        IsOwner,
     ]
 
     # Return user locations with clusters informations

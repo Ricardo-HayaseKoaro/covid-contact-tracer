@@ -4,7 +4,7 @@ from locations.serializers import LocationSerializer
 
 # Notification Serializer
 class NotificationSerializer(serializers.ModelSerializer):
-  location = LocationSerializer(read_only=True)
+  location = LocationSerializer()
   class Meta:
     model = Notification 
     fields = "__all__"
