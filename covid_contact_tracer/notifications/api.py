@@ -16,7 +16,7 @@ class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixi
     serializer_class = NotificationSerializer
 
     def get_queryset(self):
-        return self.request.user.notifications.all()
+        return self.request.user.notifications.all().order_by('-created_at')
 
     def create(self, request, *args, **kwargs):
         user_location_aux = request.data["location"]
