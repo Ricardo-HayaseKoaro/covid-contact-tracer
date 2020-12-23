@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
-        height: '100vh',
         overflow: 'auto',
     },
     container: {
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
-        height: '70vh',
+        height: '65vh',
     },
     dateInput: {
         display: 'flex',
@@ -114,7 +113,7 @@ function HomePage(props) {
                         </Box>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={6} className={classes.timeLineWrapper}>
                     <Box className={classes.switch}>
                         <FormControlLabel
                             control={
