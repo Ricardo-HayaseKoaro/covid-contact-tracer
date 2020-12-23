@@ -15,7 +15,6 @@ import { Provider } from 'react-redux';
 import store from '../store';
 
 import { loadUser } from '../actions/auth';
-import { getNotifications } from '../actions/notifications';
 
 //AlertOptions
 const AlertOptions = {
@@ -26,7 +25,6 @@ const AlertOptions = {
 class App extends Component {
     componentDidMount() {
         store.dispatch(loadUser());
-        store.dispatch(getNotifications());
     }
     render() {
         return (

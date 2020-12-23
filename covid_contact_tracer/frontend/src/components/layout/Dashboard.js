@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -20,6 +20,7 @@ import ListItems from './listItems';
 import NotificationsPopup from '../notifications/NotificationsPopup';
 import { connect } from 'react-redux';
 import { getLocations } from '../../actions/locations';
+import { getNotifications } from '../../actions/notifications';
 
 const mapStateToProps = (state) => ({
   notifications: state.notifications.notifications,
@@ -28,6 +29,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => {
   return {
     getLocations: (startTime, endTime) => dispatch(getLocations(startTime, endTime)),
+    getNotifications: () => dispatch(getNotifications()),
   }
 }
 
@@ -158,6 +160,11 @@ function Dashboard(props) {
   };
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  useEffect(() => {
+    // code to run on component mount
+    props.getNotifications();
+  }, [])
 
   return (
     <div className={classes.root}>
