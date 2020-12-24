@@ -1,34 +1,11 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import GoogleMap from '../maps/GoogleMaps';
 import {isEmpty} from "lodash"
 import LocationCardMap from "./LocationCardMap"
 import PlaceIcon from '@material-ui/icons/Place';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import { showMap, getDetails, showDialog } from '../../actions/locations';
-
 import LOS_ANGELES_CENTER from './la_center';
-import zIndex from '@material-ui/core/styles/zIndex';
-
-//Redux mapping
-const mapStateToProps = state => {
-  return {
-    locations: state.locations.locations,
-    centerLocation: state.locations.centerLocation,
-    showLocation: state.locations.showLocation,
-    locationDialog: state.locations.locationDialog,
-    dialogOpen: state.locations.dialogOpen
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    showMap: (id) => dispatch(showMap(id)),
-    showDialog: (location, open) => dispatch(showDialog(location, open)),
-    getDetails: (placeId) => dispatch(getDetails(placeId))
-  }
-}
 
 // InfoWindow component
 const InfoWindow = (props) => {
@@ -174,5 +151,5 @@ function MarkerInfoWindow(props) {
   );
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(MarkerInfoWindow);
+export default MarkerInfoWindow;
 

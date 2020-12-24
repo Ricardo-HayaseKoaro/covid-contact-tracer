@@ -13,32 +13,13 @@ import LocationDialog from './LocationDialog';
 import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
-
-import { getDetails, centerMap, showMap, showDialog } from '../../actions/locations';
-import { connect } from 'react-redux';
+import TimelineHelp from './TimelineHelp';
 
 
 // Convert date format from DateTimeField format(python) to date (js)
 const convertDate = data => {
   let d = new Date(data);
   return d.toLocaleString();
-}
-
-const mapStateToProps = state => {
-  return {
-    locations: state.locations.locations,
-    locationDialog: state.locations.locationDialog,
-    dialogOpen: state.locations.dialogOpen
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getDetails: (placeId) => dispatch(getDetails(placeId)),
-    centerMap: (location) => dispatch(centerMap(location)),
-    showMap: (id) => dispatch(showMap(id)),
-    showDialog: (location, open) => dispatch(showDialog(location, open))
-  }
 }
 
 function TimelineLocations(props) {
@@ -60,75 +41,83 @@ function TimelineLocations(props) {
     props.showDialog(props.locationDialog, false); // close dialog
   };
 
-  return (
-    <Timeline >
-      {props.locations.map((location) => {
-        let iconColor;
-        let txtColor;
-        if (location["infected"]) {
-          iconColor = "E30808";
-          txtColor = "error";
-        }
-        else if (location["contacts"].length > 5) {
-          iconColor = "FDB606";
-          txtColor = "inherit";
-        }
-        else {
-          txtColor = "inherit";
-          iconColor = "#3f51b5";
-        }
+  if (props.locations.length == 0) {
+    return (
+      <TimelineHelp />
+    )
+  } else {
+    return (
+      <Box maxWidth="fit-content">
+        <Timeline >
+          {props.locations.map((location) => {
+            let iconColor;
+            let txtColor;
+            if (location["infected"]) {
+              iconColor = "E30808";
+              txtColor = "error";
+            }
+            else if (location["contacts"].length > 5) {
+              iconColor = "FDB606";
+              txtColor = "inherit";
+            }
+            else {
+              txtColor = "inherit";
+              iconColor = "#3f51b5";
+            }
 
-        return (
-          <TimelineItem key={location["id"]}>
-            <TimelineOppositeContent>
-              <Typography>
-                <Link
-                  component="button"
-                  onClick={() => handleClickOpen(location)}
-                  color={txtColor}
-                  align="right"
-                  variant="inherit"
-                >
-                  <Box fontWeight="fontWeightMedium">
-                    {location["name"]}
-                  </Box>
-                </Link>
-              </Typography>
-            </TimelineOppositeContent>
-            <TimelineSeparator>
-              <IconButton onClick={() => handleClickIcon(location)} size="small">
-                <TimelineDot>
-                  {location.infected ?
-                    <WarningIcon style={{ fontSize: 20, color: iconColor }} /> :
-                    <PlaceIcon style={{ fontSize: 20, color: iconColor }} />
-                  }
-                </TimelineDot>
-              </IconButton>
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>
-              <Typography color="textSecondary">
-                <Link
-                  component="button"
-                  onClick={() => handleClickOpen(location)}
-                  color="inherit"
-                  variant="inherit"
-                >
-                  {convertDate(location["startTime"])}
-                  {location["notified"] &&
-                    <Typography color="textSecondary">
-                      You notified this place
+            return (
+              <TimelineItem key={location["id"]}>
+                <TimelineOppositeContent>
+                  <Typography>
+                    <Link
+                      component="button"
+                      onClick={() => handleClickOpen(location)}
+                      color={txtColor}
+                      align="right"
+                      variant="inherit"
+                    >
+                      <Box fontWeight="fontWeightMedium">
+                        {location["name"]}
+                      </Box>
+                    </Link>
                   </Typography>
-                  }
-                </Link>
-              </Typography>
-            </TimelineContent>
-          </TimelineItem>
-        );
-      })}
-      <LocationDialog location={props.locationDialog} open={props.dialogOpen} onClose={handleClose} />
-    </Timeline>
-  );
+                </TimelineOppositeContent>
+                <TimelineSeparator>
+                  <IconButton onClick={() => handleClickIcon(location)} size="small">
+                    <TimelineDot>
+                      {location.infected ?
+                        <WarningIcon style={{ fontSize: 20, color: iconColor }} /> :
+                        <PlaceIcon style={{ fontSize: 20, color: iconColor }} />
+                      }
+                    </TimelineDot>
+                  </IconButton>
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent>
+                  <Typography color="textSecondary">
+                    <Link
+                      component="button"
+                      onClick={() => handleClickOpen(location)}
+                      color="inherit"
+                      variant="inherit"
+                    >
+                      {convertDate(location["startTime"])}
+                      {location["notified"] &&
+                        <Typography color="textSecondary">
+                          You notified this place
+                    </Typography>
+                      }
+                    </Link>
+                  </Typography>
+                </TimelineContent>
+              </TimelineItem>
+            );
+          })}
+          <LocationDialog location={props.locationDialog} open={props.dialogOpen} onClose={handleClose} />
+        </Timeline>
+      </Box>
+    );
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimelineLocations);
+export default TimelineLocations;

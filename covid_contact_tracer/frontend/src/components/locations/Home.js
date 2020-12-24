@@ -12,15 +12,25 @@ import Button from '@material-ui/core/Button';
 import TimelineLocations from './TimelineLocations';
 import SimpleMap from './LocationMaps';
 import { connect } from 'react-redux';
-import { getLocations } from '../../actions/locations';
+import { getLocations, centerMap, showMap, getDetails, showDialog } from '../../actions/locations';
+
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    locations: state.locations.locations,
+    centerLocation: state.locations.centerLocation,
+    showLocation: state.locations.showLocation,
+    locationDialog: state.locations.locationDialog,
+    dialogOpen: state.locations.dialogOpen,
 });
 
 const mapDispatchToProps = dispatch => {
     return {
         getLocations: (startTime, endTime) => dispatch(getLocations(startTime, endTime)),
+        showMap: (id) => dispatch(showMap(id)),
+        showDialog: (location, open) => dispatch(showDialog(location, open)),
+        getDetails: (placeId) => dispatch(getDetails(placeId)),
+        centerMap: (location) => dispatch(centerMap(location)),
     }
 }
 
@@ -107,9 +117,7 @@ function HomePage(props) {
                     </Box>
                     <br />
                     <Paper className={classes.paper} >
-                        <Box maxWidth="fit-content">
-                            <TimelineLocations className={classes.timeLine} />
-                        </Box>
+                        <TimelineLocations className={classes.timeLine} {...props}/>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.timeLineWrapper}>
@@ -128,7 +136,7 @@ function HomePage(props) {
                     </Box>
                     <br />
                     <Paper className={classes.paper} >
-                        <SimpleMap heatmap={heatmap} />
+                        <SimpleMap heatmap={heatmap} {...props}/>
                     </Paper>
                 </Grid>
             </Grid>
