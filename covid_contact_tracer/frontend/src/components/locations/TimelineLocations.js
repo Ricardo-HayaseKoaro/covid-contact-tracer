@@ -53,14 +53,19 @@ function TimelineLocations(props) {
             let iconColor;
             let txtColor;
             if (location["infected"]) {
-              iconColor = "E30808";
-              txtColor = "error";
+              // If has a notification that was another user that created it
+              if (location.notifications.filter((notification) => !notification.notifier).length > 0){
+                // Red alert
+                iconColor = "E30808";
+                txtColor = "error";
+              }
+              else { // You were the one that notified this place
+                // Yellow alert
+                iconColor = "FDB606";
+                txtColor = "inherit";
+              }
             }
-            else if (location["contacts"].length > 5) {
-              iconColor = "FDB606";
-              txtColor = "inherit";
-            }
-            else {
+            else { // No notifications
               txtColor = "inherit";
               iconColor = "#3f51b5";
             }

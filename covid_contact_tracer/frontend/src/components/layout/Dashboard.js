@@ -203,7 +203,7 @@ function Dashboard(props) {
           <ClickAwayListener onClickAway={handleCloseNotifications}>
             <div>
               <IconButton color="inherit" type="button" onClick={handleNotification}>
-                <Badge badgeContent={props.notifications.filter((notification) => !notification.visualized).length} color="secondary">
+                <Badge badgeContent={props.notifications.filter((notification) => !notification.visualized && !notification.notifier).length} color="secondary">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>

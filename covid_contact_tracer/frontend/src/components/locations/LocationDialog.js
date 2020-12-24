@@ -14,7 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Collapse from '@material-ui/core/Collapse';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import WarningIcon from '@material-ui/icons/Warning';
+import Warning from '../layout/Warning';
 import { red } from '@material-ui/core/colors';
 
 import { connect } from 'react-redux';
@@ -51,15 +51,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function LocationDialog(props) {
-    const classes = useStyles();
-  
-    return (
-      <Dialog aria-labelledby="simple-dialog-title" open={props.open} onClose={props.onClose}>
-         <LocationCard notify={props.notify} location={props.location} deleteLocation={props.deleteLocation} onClose={props.onClose} place={props.place_details.result} loading={props.isLoadingDetails}/>
-      </Dialog>
-    ) 
+  const classes = useStyles();
+
+  return (
+    <Dialog aria-labelledby="simple-dialog-title" open={props.open} onClose={props.onClose}>
+      <LocationCard notify={props.notify} location={props.location} deleteLocation={props.deleteLocation} onClose={props.onClose} place={props.place_details.result} loading={props.isLoadingDetails} />
+    </Dialog>
+  )
 }
-function LocationCard(props){
+function LocationCard(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { loading } = props;
@@ -83,21 +83,13 @@ function LocationCard(props){
   }
 
   const getGoogleLink = (placeId) => {
-    const url = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id="+placeId;
+    const url = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id=" + placeId;
     return url;
   }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  let warningText = "";
-  if (props.location["notified"]){
-    warningText = "You notified this place as a possible COVID-19 infected. We recommend that you scrupulously follow the instructions provided by the health authorities.";
-  }
-  else if (props.location["infected"]) {
-    warningText = "It is possible that you come in contact with someone who has experienced COVID-19-like symptoms. We recommend that you scrupulously follow the instructions provided by the health authorities and check for COVID-19 symptons.";
-  }
 
   return (
     <Card className={classes.card}>
@@ -106,23 +98,23 @@ function LocationCard(props){
           loading ? (
             <Skeleton animation="wave" variant="circle" width={40} height={40} />
           ) : (
-            <Avatar aria-label="recipe" src={props.place["icon"]} />
-          )
+              <Avatar aria-label="recipe" src={props.place["icon"]} />
+            )
         }
         title={
           loading ? (
             <Skeleton animation="wave" height={10} width="80%" style={{ marginBottom: 6 }} />
           ) : (
-            props.place["name"]
-          )
+              props.place["name"]
+            )
         }
       />
-        {loading ? (
+      {loading ? (
         <Skeleton animation="wave" width={345} variant="rect" className={classes.media} />
       ) : (
-        null
-      )}
-      
+          null
+        )}
+
       <CardContent>
         {loading ? (
           <React.Fragment>
@@ -130,94 +122,89 @@ function LocationCard(props){
             <Skeleton animation="wave" height={10} width="80%" />
           </React.Fragment>
         ) : (
-          <React.Fragment>
-            {props.location["infected"] &&
-              <React.Fragment>
-                  <Typography variant="subtitle2" component="p">
-                    <WarningIcon style={{ color: red[500] }}/>
-                    {warningText}
-                  </Typography>
-                <br></br>
-              </React.Fragment>
-            }
-            <Typography variant="body2" component="p">
-              <b>Adress:</b> {props.place["formatted_address"]}
-            </Typography>
-            <Typography variant="body2" component="p">
-              <b>From:</b> {convertDate(props.location["startTime"])}
-            </Typography>
-            <Typography variant="body2" component="p">
-              <b>To:</b> {convertDate(props.location["endTime"])}
-            </Typography>
-            <Typography variant="body2" component="p">
-              <b>Number of contacts:</b> {props.location["contacts"].length}
-            </Typography>
-          </React.Fragment>
-        )}
+            <React.Fragment>
+              {props.location["infected"] && <Warning location={props.location}/>}
+              <Typography variant="body2">
+                <b>Adress:</b> {props.place["formatted_address"]}
+              </Typography>
+              <Typography variant="body2">
+                <b>From:</b> {convertDate(props.location["startTime"])}
+              </Typography>
+              <Typography variant="body2">
+                <b>To:</b> {convertDate(props.location["endTime"])}
+              </Typography>
+              <Typography variant="body2">
+                <b>Number of contacts:</b> {props.location["contacts"].length}
+              </Typography>
+              <Typography variant="body2">
+                <b>Number of notifications:</b> {props.location["notifications"].length}
+              </Typography>
+            </React.Fragment>
+          )}
       </CardContent>
       {loading ? (
         null
-        ) : (
-        <React.Fragment>
-          <CardActions className={classes.cardActions} disableSpacing>
-            {props.location["notified"] ? 
-              <Button variant="contained" size="medium" className={classes.notify} disabled>
-                Already notified
-              </Button>
-              :
-              <Button variant="contained" size="medium" className={classes.notify} onClick={() => handleNotify(props.location)}>
-                Notify
-              </Button>
-            }
-            <IconButton aria-label="delete" color="primary" onClick={() => handleDelete(props.location["id"])}>
-              <DeleteIcon/>
-            </IconButton>
-            <IconButton
-              className={clsx(classes.expand, {
-                [classes.expandOpen]: expanded,
-              })}
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          </CardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <CardContent>
-              {props.place.hasOwnProperty('international_phone_number') &&
-                <Typography variant="body2" component="p">
-                <b>Phone number:</b> {props.place["international_phone_number"]}
-                </Typography>
-              }
-              {props.place.hasOwnProperty('website') &&
-                <Typography variant="body2" component="p">
-                <b>Website:</b> <a href={props.place["website"]} target="_blank">{props.place["website"]}</a>
-                </Typography>
-              }
-              {props.place.hasOwnProperty('opening_hours') &&
-                <Typography variant="body2" component="p">
-                  <b>Opening hours:</b>
-                </Typography>
-              }
-              {props.place.hasOwnProperty('opening_hours') ? (
-                props.place["opening_hours"]["weekday_text"].map((day, index) => {
-                  return (
-                    <Typography variant="body2" component="p" key={index}>
-                      {day}
-                    </Typography>
-                  )
-                })
-              ) : ( null )}
-            </CardContent>
+      ) : (
+          <React.Fragment>
             <CardActions className={classes.cardActions} disableSpacing>
-              <Button target="_blank" href={getGoogleLink(props.location["placeId"])} size="small" color="primary">
-                See on Google Maps
+              {props.location["notified"] ?
+                <Button variant="contained" size="medium" className={classes.notify} disabled>
+                  Already notified
               </Button>
+                :
+                <Button variant="contained" size="medium" className={classes.notify} onClick={() => handleNotify(props.location)}>
+                  Notify
+              </Button>
+              }
+              <IconButton aria-label="delete" color="primary" onClick={() => handleDelete(props.location["id"])}>
+                <DeleteIcon />
+              </IconButton>
+              <IconButton
+                className={clsx(classes.expand, {
+                  [classes.expandOpen]: expanded,
+                })}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more"
+              >
+                <ExpandMoreIcon />
+              </IconButton>
             </CardActions>
-          </Collapse>
-      </React.Fragment>  
-      )}
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <CardContent>
+                {props.place.hasOwnProperty('international_phone_number') &&
+                  <Typography variant="body2">
+                    <b>Phone number:</b> {props.place["international_phone_number"]}
+                  </Typography>
+                }
+                {props.place.hasOwnProperty('website') &&
+                  <Typography variant="body2">
+                    <b>Website:</b> <a href={props.place["website"]} target="_blank">{props.place["website"]}</a>
+                  </Typography>
+                }
+                {props.place.hasOwnProperty('opening_hours') &&
+                  <Typography variant="body2">
+                    <b>Opening hours:</b>
+                  </Typography>
+                }
+                {props.place.hasOwnProperty('opening_hours') ? (
+                  props.place["opening_hours"]["weekday_text"].map((day, index) => {
+                    return (
+                      <Typography variant="body2" key={index}>
+                        {day}
+                      </Typography>
+                    )
+                  })
+                ) : (null)}
+              </CardContent>
+              <CardActions className={classes.cardActions} disableSpacing>
+                <Button target="_blank" href={getGoogleLink(props.location["placeId"])} size="small" color="primary">
+                  See on Google Maps
+              </Button>
+              </CardActions>
+            </Collapse>
+          </React.Fragment>
+        )}
     </Card>
   );
 }

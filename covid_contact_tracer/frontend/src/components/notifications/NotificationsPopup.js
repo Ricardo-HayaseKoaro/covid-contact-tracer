@@ -36,7 +36,7 @@ export default function notifications(props) {
 
     return (
         <List className={classes.root}>
-            {props.notifications.filter((notification) => !notification.visualized).map((notification) => {
+            {props.notifications.filter((notification) => !notification.visualized && !notification.notifier).map((notification) => {
                 return (
                     <React.Fragment key={notification["id"]}>
                             <ListItem  alignItems="flex-start" onClick={() => notification["visualized"]=true} button component={Link} to={{ pathname: "/notifications", search: "?id="+notification["id"] }}  className={classes.notification}>

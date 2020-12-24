@@ -22,7 +22,7 @@ const InfoWindow = (props) => {
 
   return (
     <div style={infoWindowStyle}>
-      <LocationCardMap place={props.place} openDialog={props.openDialog} closeDialog={props.closeDialog}></LocationCardMap>
+      <LocationCardMap location={props.place} openDialog={props.openDialog} closeDialog={props.closeDialog}></LocationCardMap>
     </div>
   );
 };
@@ -30,21 +30,30 @@ const InfoWindow = (props) => {
 // Marker component
 const Marker = (props) => {
 
-  let infected = props.place["infected"];
-  let zIndexControl;
-  if (infected) {
+  let zIndexControl = 1;
+  let iconColor = "#3f51b5";
+  if (props.place["infected"]) {
+    // If has a notification that was another user that created it
+    if (props.place.notifications.filter((notification) => !notification.notifier).length > 0){
+      // Red alert
+      iconColor = "E30808";
+    }
+    else { // You were the one that notified this place
+      // Yellow alert
+      iconColor = "FDB606";
+    }
     zIndexControl = 50;
   }
   const markerStyle = {
     height: 20,
     width: 20,
-    color: infected ? 'red' : '#3f51b5',
+    color: iconColor,
     cursor: 'pointer',
     position: 'relative',
     zIndex: zIndexControl,
   };
 
-  if (infected) {
+  if (props.place["infected"]) {
     return (
       <>
         <WarningIcon style={markerStyle} />

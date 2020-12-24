@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
 import WarningIcon from '@material-ui/icons/Warning';
 import { grey, red } from '@material-ui/core/colors';
 
@@ -74,9 +75,9 @@ function Row(props) {
 
     const myRef = useRef(null)
 
-    const executeScroll = () => myRef.current.scrollIntoView()    
+    const executeScroll = () => myRef.current.scrollIntoView()
     // run this function from an event handler or an effect to execute scroll 
- 
+
     // Focus and open the notification clicked on the popper
     useEffect(() => {
         if (props.location) {
@@ -98,6 +99,11 @@ function Row(props) {
     }
 
     const background = open ? grey[100] : null;
+
+    const getGoogleLink = (placeId) => {
+        const url = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id=" + placeId;
+        return url;
+    }
 
     return (
         <React.Fragment>
@@ -130,6 +136,7 @@ function Row(props) {
                                     <TableRow>
                                         <TableCell>Check-in time</TableCell>
                                         <TableCell>Check-out time</TableCell>
+                                        <TableCell>Number of notifications in this place</TableCell>
                                         <TableCell align="right">Map</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -141,16 +148,31 @@ function Row(props) {
                                         <TableCell>
                                             {convertDate(row.location["endTime"])}
                                         </TableCell>
-                                        <TableCell align="right">See on GoogleMaps</TableCell>
+                                        <TableCell>
+                                            {row.location["notifications"].length}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Button target="_blank" href={getGoogleLink(row.location["placeId"])} size="small" color="primary">
+                                                See on Google Maps
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
-                            <Box margin={2}>
-                                <Typography variant="subtitle2" gutterBottom component="div">
-                                    <WarningIcon fontSize="small" style={{ color: red[500] }} />
+                            {!row["notifier"] ?
+                                <Box margin={2}>
+                                    <Typography variant="subtitle2" gutterBottom component="div">
+                                        <WarningIcon fontSize="small" style={{ color: red[500] }} />
                                     It is possible that you come in contact with someone who has experienced COVID-19-like symptoms. We recommend that you scrupulously follow the instructions provided by the health authorities and check for COVID-19 symptons.
                                 </Typography>
-                            </Box>
+                                </Box> :
+                                <Box margin={2}>
+                                <Typography variant="subtitle2" gutterBottom component="div">
+                                    <WarningIcon fontSize="small" style={{ color: 'FDB606' }} />
+                                    You notified this place as a possible COVID-19 infected. We recommend that you scrupulously follow the instructions provided by the health authorities.
+                                </Typography>
+                                </Box> 
+                            }
                         </Box>
                     </Collapse>
                 </TableCell>
