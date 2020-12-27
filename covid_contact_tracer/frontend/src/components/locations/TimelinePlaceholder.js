@@ -62,7 +62,7 @@ export default function Placeholder(props) {
                 <Typography variant='subtitle1'>
                     For help click
                 </Typography>
-                <IconButton>
+                <IconButton onClick={props.handleHelpOpen}>
                     <HelpIcon fontSize='small'/>
                 </IconButton>
             </Box>

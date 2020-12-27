@@ -17,8 +17,11 @@ import Fade from '@material-ui/core/Fade';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import HelpIcon from '@material-ui/icons/Help';
 
 import Modal from '../layout/Modal';
+import Help from '../layout/Help';
 import UploadLocations from '../locations/UploadLocations';
 import ListItems from './listItems';
 import NotificationsPopup from '../notifications/NotificationsPopup';
@@ -157,6 +160,7 @@ function Dashboard(props) {
   const [open, setOpen] = React.useState(false); // For slide menu
   const [anchorNotification, setAnchotNotif] = React.useState(null); // Anchor for notification popper
   const [openUpload, setUpload] = React.useState(false); // For upload files dialog
+  const [openHelp, setHelp] = React.useState(false); // For help dialog
 
   //Notification Popper control
   const openPopper = Boolean(anchorNotification);
@@ -184,6 +188,14 @@ function Dashboard(props) {
 
   const handleUploadClose = () => {
     setUpload(false);
+  }
+
+  const handleHelpOpen = () => {
+    setHelp(true);
+  }
+
+  const handleHelpClose = () => {
+    setHelp(false);
   }
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -224,6 +236,12 @@ function Dashboard(props) {
                   </Fade>
                 )}
               </Popper>
+              <IconButton color="inherit" type="button" onClick={handleUploadOpen}>
+                  <CloudUploadIcon />
+              </IconButton>
+              <IconButton color="inherit" type="button" onClick={handleHelpOpen}>
+                  <HelpIcon />
+              </IconButton>
             </div>
           </ClickAwayListener>
         </Toolbar>
@@ -241,14 +259,14 @@ function Dashboard(props) {
           </IconButton>
         </div>
         <Divider />
-        <ListItems handleUploadOpen={handleUploadOpen} />
+        <ListItems/>
       </Drawer>
       <main className={classes.content}>
         <Modal />
         <UploadLocations openUpload={openUpload} handleClose={handleUploadClose}/>
-
+        <Help open={openHelp} handleClose={handleHelpClose}/>
         <div className={classes.appBarSpacer} />
-        {cloneElement(props.children, { handleUploadOpen })}
+        {cloneElement(props.children, { handleUploadOpen, handleHelpOpen })}
         <Box pt={2}>
           <Copyright />
         </Box>

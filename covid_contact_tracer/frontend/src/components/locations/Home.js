@@ -119,7 +119,7 @@ function HomePage(props) {
                     <br />
                     <Paper className={classes.paper} >
                         { props.locations.length == 0 ? 
-                            <TimelinePlaceholder onLoadClick={() => props.getLocations(startTime, endTime)} handleUploadOpen={props.handleUploadOpen}/> : 
+                            <TimelinePlaceholder onLoadClick={() => props.getLocations(startTime, endTime)} handleUploadOpen={props.handleUploadOpen} handleHelpOpen={props.handleHelpOpen}/> : 
                             <TimelineLocations className={classes.timeLine} {...props}/>
                         } 
                     </Paper>

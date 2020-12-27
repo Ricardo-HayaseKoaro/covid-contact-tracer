@@ -5,7 +5,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import Divider from '@material-ui/core/Divider';
@@ -35,12 +34,6 @@ function listItems(props) {
           <BarChartIcon />
         </ListItemIcon>
         <ListItemText primary="Notifications" />
-      </ListItem>
-      <ListItem button onClick={props.handleUploadOpen}>
-        <ListItemIcon>
-          <CloudUploadIcon />
-        </ListItemIcon>
-        <ListItemText primary="Upload Locations" />
       </ListItem>
       <Divider />
       <ListItem button component={Link} to="/login" onClick={props.logout}>
