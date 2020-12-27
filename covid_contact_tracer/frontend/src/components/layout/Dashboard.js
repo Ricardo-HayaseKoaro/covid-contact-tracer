@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, cloneElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,14 +14,15 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import Modal from '../layout/Modal';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
-
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
+import Modal from '../layout/Modal';
+import UploadLocations from '../locations/UploadLocations';
 import ListItems from './listItems';
 import NotificationsPopup from '../notifications/NotificationsPopup';
+
 import { connect } from 'react-redux';
 import { getLocations } from '../../actions/locations';
 import { getNotifications } from '../../actions/notifications';
@@ -155,6 +156,7 @@ function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false); // For slide menu
   const [anchorNotification, setAnchotNotif] = React.useState(null); // Anchor for notification popper
+  const [openUpload, setUpload] = React.useState(false); // For upload files dialog
 
   //Notification Popper control
   const openPopper = Boolean(anchorNotification);
@@ -175,6 +177,14 @@ function Dashboard(props) {
   const handleCloseNotifications = () => {
     setAnchotNotif(null);
   };
+
+  const handleUploadOpen = () => {
+    setUpload(true);
+  }
+
+  const handleUploadClose = () => {
+    setUpload(false);
+  }
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -231,12 +241,14 @@ function Dashboard(props) {
           </IconButton>
         </div>
         <Divider />
-        <ListItems />
+        <ListItems handleUploadOpen={handleUploadOpen} />
       </Drawer>
       <main className={classes.content}>
         <Modal />
+        <UploadLocations openUpload={openUpload} handleClose={handleUploadClose}/>
+
         <div className={classes.appBarSpacer} />
-        {props.children}
+        {cloneElement(props.children, { handleUploadOpen })}
         <Box pt={2}>
           <Copyright />
         </Box>

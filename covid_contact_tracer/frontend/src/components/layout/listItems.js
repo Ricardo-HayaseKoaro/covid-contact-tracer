@@ -5,16 +5,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
 import Divider from '@material-ui/core/Divider';
-import UploadLocations from '../locations/UploadLocations';
 
 import { logout } from '../../actions/auth';
 import { connect } from 'react-redux';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 const mapStateToProps = state => {
@@ -24,35 +22,34 @@ const mapStateToProps = state => {
 }
 
 function listItems(props) {
-return (
-  <List>
+  return (
+    <List>
       <ListItem button component={Link} to="/">
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Your Timeline" />
       </ListItem>
-      <UploadLocations/>
       <ListItem button component={Link} to="/notifications">
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
         <ListItemText primary="Notifications" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={props.handleUploadOpen}>
         <ListItemIcon>
-          <LayersIcon />
+          <CloudUploadIcon />
         </ListItemIcon>
-        <ListItemText primary="Integrations" />
+        <ListItemText primary="Upload Locations" />
       </ListItem>
-      <Divider/>
+      <Divider />
       <ListItem button component={Link} to="/login" onClick={props.logout}>
-        <ListItemIcon> 
+        <ListItemIcon>
           <ExitToAppIcon />
         </ListItemIcon>
         <ListItemText primary="Logout" />
       </ListItem>
-      </List>
+    </List>
   );
 }
 

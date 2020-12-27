@@ -10,6 +10,7 @@ import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 
 import TimelineLocations from './TimelineLocations';
+import TimelinePlaceholder from './TimelinePlaceholder';
 import SimpleMap from './LocationMaps';
 import { connect } from 'react-redux';
 import { getLocations, centerMap, showMap, getDetails, showDialog } from '../../actions/locations';
@@ -112,12 +113,15 @@ function HomePage(props) {
                         <Box marginTop="15px">
                             <Button variant="outlined" color="primary" onClick={() => props.getLocations(startTime, endTime)}>
                                 Load
-                      </Button>
+                            </Button>
                         </Box>
                     </Box>
                     <br />
                     <Paper className={classes.paper} >
-                        <TimelineLocations className={classes.timeLine} {...props}/>
+                        { props.locations.length == 0 ? 
+                            <TimelinePlaceholder onLoadClick={() => props.getLocations(startTime, endTime)} handleUploadOpen={props.handleUploadOpen}/> : 
+                            <TimelineLocations className={classes.timeLine} {...props}/>
+                        } 
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.timeLineWrapper}>
