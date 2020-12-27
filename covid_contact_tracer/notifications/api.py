@@ -34,7 +34,11 @@ class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixi
         notifications.append(notification)
         for location in locations:
             location.infected = True
-            notification = Notification(user=location.owner, notifier=False, visualized=False, location=location)
+            notifier = False
+            # Validation necessary because user can upload same locations more than once
+            if location.owner == request.user:
+                notifier = True
+            notification = Notification(user=location.owner, notifier=notifier, visualized=False, location=location)
             notifications.append(notification)
         Location.objects.bulk_update(locations, ["infected"])
         Notification.objects.bulk_create(notifications)
