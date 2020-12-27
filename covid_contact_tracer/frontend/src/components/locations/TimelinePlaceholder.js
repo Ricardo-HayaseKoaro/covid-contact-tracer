@@ -38,7 +38,7 @@ export default function Placeholder(props) {
     return (
         <Box className={classes.root}>
             <Box className={classes.option}>
-                <Typography variant='h5'>
+                <Typography variant='h5' align='center'>
                     Load your location history
                 </Typography>
                 <br/>
@@ -50,7 +50,7 @@ export default function Placeholder(props) {
                   OR
                 </Typography>
                 <br/>
-                <Typography variant='h5'>
+                <Typography variant='h5' align='center'>
                     Upload your location history
                 </Typography>
                 <br/>

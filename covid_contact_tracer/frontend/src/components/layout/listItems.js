@@ -3,7 +3,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BarChartIcon from '@material-ui/icons/BarChart';
@@ -36,6 +36,12 @@ function listItems(props) {
         <ListItemText primary="Notifications" />
       </ListItem>
       <Divider />
+      <ListItem button component={Link} to="/account">
+        <ListItemIcon>
+          <AccountCircleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Your Account" />
+      </ListItem>
       <ListItem button component={Link} to="/login" onClick={props.logout}>
         <ListItemIcon>
           <ExitToAppIcon />

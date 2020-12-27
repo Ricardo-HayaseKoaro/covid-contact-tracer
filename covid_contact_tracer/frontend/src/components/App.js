@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
 import HomePage from './locations/Home';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
+import Account from './accounts/Account';
 import Alerts from './layout/Alerts';
 import PrivateRoute from './common/PrivateRoute';
 import NotificationsList from './notifications/NotificationsList';
@@ -37,6 +38,7 @@ class App extends Component {
                         <Switch>
                             <PrivateRoute exact path="/" component={HomePage} />
                             <PrivateRoute exact path="/notifications" component={NotificationsList} />
+                            <PrivateRoute exact path="/account" component={Account}/>
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/register" component={Register} />
                         </Switch>
