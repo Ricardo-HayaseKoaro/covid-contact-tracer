@@ -14,8 +14,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Collapse from '@material-ui/core/Collapse';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Warning from '../layout/Warning';
 import { red } from '@material-ui/core/colors';
+
+import Warning from '../layout/Warning';
+import NotificationConfirm from './NotificationConfirm';
+
 
 import { connect } from 'react-redux';
 import { deleteLocation } from '../../actions/locations';
@@ -62,6 +65,7 @@ function LocationDialog(props) {
 function LocationCard(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [open, setOpen] = React.useState(false); // Notification confirmation control
   const { loading } = props;
 
   const handleDelete = (location_id) => {
@@ -69,12 +73,24 @@ function LocationCard(props) {
     props.onClose();
   }
 
-  const handleNotify = (location) => {
-    props.notify(location);
-    location["infected"] = true;
-    location["notified"] = true;
+  const handleNotify = () => {
+    props.notify(props.location);
+    props.location["infected"] = true;
+    props.location["notified"] = true;
     props.onClose();
   }
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  const handleCloseConfirmation = () => {
+    setOpen(false);
+  };
+
+  const handleOpenConfirmation = () => {
+    setOpen(true);
+  };
 
   // Convert date format from DateTimeField format(python) to date (js)
   const convertDate = data => {
@@ -87,12 +103,9 @@ function LocationCard(props) {
     return url;
   }
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
   return (
     <Card className={classes.card}>
+      <NotificationConfirm open={open} handleClose={handleCloseConfirmation} handleNotify={handleNotify}/>
       <CardHeader
         avatar={
           loading ? (
@@ -152,7 +165,7 @@ function LocationCard(props) {
                   Already notified
               </Button>
                 :
-                <Button variant="contained" size="medium" className={classes.notify} onClick={() => handleNotify(props.location)}>
+                <Button variant="contained" size="medium" className={classes.notify} onClick={() => handleOpenConfirmation()}>
                   Notify
               </Button>
               }
