@@ -55,7 +55,8 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: "10px",
         position: 'relative',
         overflow: 'auto',
-        maxHeight: '75vh',
+        
+        height: '75vh',
     },
     head: {
         backgroundColor: grey[300],
@@ -81,9 +82,10 @@ function Row(props) {
     // Focus and open the notification clicked on the popper
     useEffect(() => {
         if (props.location) {
-            if (props.location.search != "") {
+            if (props.location["search"] != "") {
                 if (props.location.search.split('=')[1] == row.id) {
                     executeScroll();
+                    setOpen(true);
                     props.visualize(row);
                 }
             }
@@ -186,7 +188,18 @@ function CollapsibleTable(props) {
 
     // Get info from Link component of router
     const location = useLocation();
-
+    
+    let body;
+    if (props.notifications.length == 0){
+        body = () => {
+            null;
+        };
+    }
+    else {
+        body = props.notifications.map((row) => (
+            <Row location={location} key={row.id} row={row} visualize={props.visualizeNotification} />
+        ));
+    }
     return (
         <Container className={classes.root}>
             <TableContainer component={Paper} className={classes.table}>
@@ -199,9 +212,7 @@ function CollapsibleTable(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {props.notifications.map((row) => (
-                            <Row location={location} key={row.id} row={row} visualize={props.visualizeNotification} />
-                        ))}
+                        {body}
                     </TableBody>
                 </Table>
             </TableContainer>

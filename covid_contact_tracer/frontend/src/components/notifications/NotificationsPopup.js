@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         maxWidth: '36ch',
-        backgroundColor: grey[300],
+        backgroundColor: grey[400],
         borderRadius: "10px",
         position: 'relative',
         overflow: 'auto',
@@ -34,12 +34,27 @@ const useStyles = makeStyles((theme) => ({
 export default function notifications(props) {
     const classes = useStyles();
 
-    return (
-        <List className={classes.root}>
-            {props.notifications.filter((notification) => !notification.visualized && !notification.notifier).map((notification) => {
-                return (
-                    <React.Fragment key={notification["id"]}>
-                            <ListItem  alignItems="flex-start" onClick={() => notification["visualized"]=true} button component={Link} to={{ pathname: "/notifications", search: "?id="+notification["id"] }}  className={classes.notification}>
+    const handleClose = (notification) => {
+        notification["visualized"] = true;
+        props.handleClose();
+    };
+
+    if (props.notifications.filter((notification) => !notification.visualized && !notification.notifier).length == 0) {
+        return (
+            <List className={classes.root}>
+                <ListItem alignItems="flex-start">
+                    <ListItemText primary="No new notifications" />
+                </ListItem>
+            </List>
+        )
+    }
+    else {
+        return (
+            <List className={classes.root}>
+                {props.notifications.filter((notification) => !notification.visualized && !notification.notifier).map((notification) => {
+                    return (
+                        <React.Fragment key={notification["id"]}>
+                            <ListItem alignItems="flex-start" onClick={() => handleClose(notification)} button component={Link} to={{ pathname: "/notifications", search: "?id=" + notification["id"] }} className={classes.notification}>
                                 <ListItemText
                                     primary="Contact Alert"
                                     secondary={
@@ -57,10 +72,11 @@ export default function notifications(props) {
                                     }
                                 />
                             </ListItem>
-                        <Divider component="li" />
-                    </React.Fragment>
-                )
-            })}
-        </List>
-    );
+                            <Divider component="li" />
+                        </React.Fragment>
+                    )
+                })}
+            </List>
+        );
+    }
 }
