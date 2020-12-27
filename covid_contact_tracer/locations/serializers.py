@@ -11,7 +11,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 # Location Serializer
 class LocationSerializer(serializers.ModelSerializer):
-  notifications = NotificationSerializer(many=True)
+  notifications = NotificationSerializer(many=True, required=False)
   class Meta:
     model = Location 
     fields = '__all__'
