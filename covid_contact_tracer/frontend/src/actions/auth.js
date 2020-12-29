@@ -63,7 +63,7 @@ export const login = (username, password) => (dispatch) => {
 };
 
 // REGISTER USER
-export const register = ({ username, password, email }) => (dispatch) => {
+export const register = (user) => (dispatch) => {
   // Headers
   const config = {
     headers: {
@@ -72,7 +72,7 @@ export const register = ({ username, password, email }) => (dispatch) => {
   };
 
   // Request Body
-  const body = JSON.stringify({ username, email, password });
+  const body = JSON.stringify(user);
   
   axios
     .post('/api/auth/register', body, config)
