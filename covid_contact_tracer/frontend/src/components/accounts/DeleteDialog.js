@@ -26,7 +26,7 @@ export default function ResponsiveDialog(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus  color="primary">
+          <Button autoFocus onClick={props.handleClose}  color="primary">
             No
           </Button>
           <Button  color="primary" onClick={props.handleDelete}>

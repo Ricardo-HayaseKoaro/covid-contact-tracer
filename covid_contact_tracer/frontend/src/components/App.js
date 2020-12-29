@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ import PrivateRoute from './common/PrivateRoute';
 import NotificationsList from './notifications/NotificationsList';
 
 import { Provider as AlertProvider } from 'react-alert';
-import AlertTemplate from 'react-alert-template-basic';
+import AlertTemplate from './layout/AlertTemplate';
 
 import { Provider } from 'react-redux';
 import store from '../store';
@@ -21,7 +21,12 @@ import { loadUser } from '../actions/auth';
 //AlertOptions
 const AlertOptions = {
     timeout: 3000,
-    postion: 'top center'
+    offset: '20px',
+    position: 'bottom left',
+    containerStyle: {
+        zIndex: 5000,
+        margin: '5vh'
+    },
 }
 
 class App extends Component {

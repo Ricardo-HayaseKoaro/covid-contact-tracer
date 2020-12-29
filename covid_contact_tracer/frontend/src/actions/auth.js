@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { returnErrors, createMessage } from './messages';
+import { createAlert  } from './alerts';
 
 import {
   USER_LOADED,
@@ -29,7 +29,6 @@ export const loadUser = () => (dispatch, getState) => {
       });
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: AUTH_ERROR,
       });
@@ -58,10 +57,10 @@ export const login = (username, password) => (dispatch) => {
       });
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: LOGIN_FAIL,
       });
+      dispatch(createAlert(err.response.data, 'error'));
     });
 };
 
@@ -86,10 +85,10 @@ export const register = (user) => (dispatch) => {
       });
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: REGISTER_FAIL,
       });
+      dispatch(createAlert(err.response.data, 'error'));
     });
 };
 
@@ -104,7 +103,7 @@ export const logout = () => (dispatch, getState) => {
       });
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      // dispatch(createAlert(err.response.data, 'error'));
     });
 };
 
@@ -142,10 +141,10 @@ export const updateUser = (user) => (dispatch, getState) => {
         type: USER_UPDATE,
         payload: res.data,
       });
-      dispatch(createMessage({updateUser: "Account information updated"}));
+      dispatch(createAlert({accountUpdated: "Account information updated"}, "success"));
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch(createAlert(err.response.data, 'error'));
     });
 };
 
@@ -162,10 +161,10 @@ export const changePassword = (passwords) => (dispatch, getState) => {
         type: USER_CHANGE_PASSWORD,
         payload: res.data,
       });
-      dispatch(createMessage({changePassword: "Password updated"}));
+      dispatch(createAlert({passwordUpdated: "Password updated"}, "success"));
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch(createAlert(err.response.data, err.response.status));
     });
 };
 
@@ -179,8 +178,9 @@ export const deleteUser = () => (dispatch, getState) => {
         type: USER_DELETE,
         payload: res.data,
       });
+      dispatch(createAlert({userDeleted: "User deleted"}, "info"));
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch(createAlert(err.response.data, 'error'));
     });
 };

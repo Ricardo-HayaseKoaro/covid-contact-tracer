@@ -1,4 +1,3 @@
-import { returnErrors } from '../actions/messages.js';
 import {
     USER_LOADED,
     USER_LOADING,

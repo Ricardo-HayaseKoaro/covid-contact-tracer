@@ -1,7 +1,5 @@
 export const GET_LOCATIONS = "GET_LOCATIONS";
-export const GET_ERRORS = "GET_ERRORS";
-export const GET_MESSAGES = "GET_MESSAGES";
-export const CREATE_MESSAGES = "CREATE_MESSAGES";
+export const CREATE_ALERT = "CREATE_ALERT";
 export const USER_LOADING = "USER_LOADING";
 export const USER_UPDATE = "USER_UPDATE";
 export const USER_DELETE = "USER_DELETE";

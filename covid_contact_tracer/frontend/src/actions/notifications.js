@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { returnErrors } from './messages';
+import { createAlert } from './alerts';
 import { tokenConfig } from './auth';
 
 import {
@@ -28,12 +28,13 @@ export const notify = (location) => (dispatch, getState) => {
         type: NOTIFY,
         payload: res.data,
         });
+        dispatch(createAlert({notified: 'System Notified'}, 'success'));
     })
     .catch((err) => {
-        dispatch(returnErrors(err.response.data, err.response.status));
         dispatch({
         type: NOTIFY_FAIL,
         });
+        dispatch(createAlert(err.response.data, 'error'));
     });
 };
 
@@ -46,12 +47,13 @@ export const getNotifications = () => (dispatch, getState) => {
         type: GET_NOTIFICATIONS,
         payload: res.data,
         });
+
     })
     .catch((err) => {
-        dispatch(returnErrors(err.response.data, err.response.status));
         dispatch({
         type: NOTIFICATION_FAIL,
         });
+        dispatch(createAlert(err.response.data, 'error'));
     });
 };
 
@@ -65,9 +67,10 @@ export const deleteNotifications = (id) => (dispatch, getState) => {
         type: DELETE_NOTIFICATIONS,
         payload: res.data,
         });
+        dispatch(createAlert({notificationDeleted: 'Notification deleted'}, 'info'));
     })
     .catch((err) => {
-        dispatch(returnErrors(err.response.data, err.response.status));
+        dispatch(createAlert(err.response.data, 'error'));
         dispatch({
         type: NOTIFICATION_FAIL,
         });
@@ -88,7 +91,7 @@ export const visualizeNotification = (notification) => (dispatch, getState) => {
         });
     })
     .catch((err) => {
-        dispatch(returnErrors(err.response.data, err.response.status));
+        dispatch(createAlert(err.response.data, 'error'));
         dispatch({
         type: NOTIFICATION_FAIL,
         });

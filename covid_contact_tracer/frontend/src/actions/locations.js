@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { GET_LOCATIONS, UPLOADING, UPLOAD_SUCESS, UPLOAD_FAIL, LOADING_DATA, GET_DETAILS, LOADING_DETAILS, DELETE_LOCATION, CENTER_MAP, SHOW_MAP, SHOW_DIALOG} from './types';
-import { createMessage, returnErrors } from './messages';
+import { createAlert  } from './alerts';
 import { tokenConfig } from './auth';
 
 // GET LOCATIONS
@@ -14,9 +14,10 @@ export const getLocations = (startTime, endTime) => (dispatch, getState) => {
           type: GET_LOCATIONS,
           payload: res.data,
         });
+        dispatch(createAlert({loadLocations: 'Locations Loaded'}, 'info'));
       })
       .catch(err => dispatch
-        (returnErrors(err.response.data, err.response.status)));
+        (createAlert(err.response.data, 'error')));
 };
 
 // DELETE LOCATIONS
@@ -28,9 +29,10 @@ export const deleteLocation = (location_id) => (dispatch, getState) => {
           type: DELETE_LOCATION,
           payload: location_id,
         });
+      dispatch(createAlert({locationDeleted: 'Location Deleted'}, 'info'));
       })
       .catch(err => dispatch
-        (returnErrors(err.response.data, err.response.status)));
+        (createAlert(err.response.data, 'error')));
 };
 
 // UPLOAD LOCATIONS
@@ -44,9 +46,11 @@ export const uploadLocations = (body) => (dispatch, getState) => {
         type: UPLOAD_SUCESS,
         payload: res.data,
       });
+      dispatch(createAlert({locationUploaded: 'Locations Upload Successfully'}, 'success'));
+
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch(createAlert(err.response.data, 'error'));
       dispatch({
         type: UPLOAD_FAIL,
       });
@@ -65,7 +69,7 @@ export const getDetails = (placeId) => (dispatch, getState) => {
     });
   })
   .catch(err => dispatch
-    (returnErrors(err.response.data, err.response.status)));
+    (createAlert(err.response.data, 'error')));
 
 };
 
