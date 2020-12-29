@@ -29,7 +29,7 @@ export default function ResponsiveDialog(props) {
           <Button autoFocus  color="primary">
             No
           </Button>
-          <Button  color="primary">
+          <Button  color="primary" onClick={props.handleDelete}>
             Yes
           </Button>
         </DialogActions>

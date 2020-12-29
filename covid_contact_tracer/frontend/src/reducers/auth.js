@@ -8,6 +8,9 @@ import {
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
     REGISTER_FAIL,
+    USER_DELETE,
+    USER_UPDATE,
+    USER_CHANGE_PASSWORD,
   } from '../actions/types';
   
 const initialState = {
@@ -24,6 +27,7 @@ export default function (state = initialState, action) {
           ...state,
           isLoading: true,
         };
+      case USER_UPDATE:
       case USER_LOADED:
         return {
           ...state,
@@ -44,12 +48,18 @@ export default function (state = initialState, action) {
       case LOGIN_FAIL:
       case LOGOUT_SUCCESS:
       case REGISTER_FAIL:
+      case USER_DELETE:
         localStorage.removeItem('token');
         return {
           ...state,
           token: null,
           user: null,
           isAuthenticated: false,
+          isLoading: false,
+        };
+      case USER_CHANGE_PASSWORD:
+        return {
+          ...state,
           isLoading: false,
         };
       default:

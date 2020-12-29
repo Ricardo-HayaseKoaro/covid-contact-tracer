@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { returnErrors } from './messages';
+import { returnErrors, createMessage } from './messages';
 
 import {
   USER_LOADED,
@@ -10,6 +10,9 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  USER_DELETE,
+  USER_UPDATE,
+  USER_CHANGE_PASSWORD,
 } from './types';
 
 // CHECK TOKEN & LOAD USER
@@ -123,4 +126,61 @@ export const tokenConfig = (getState) => {
   }
 
   return config;
+};
+
+// UPDATE USER
+export const updateUser = (user) => (dispatch, getState) => {
+
+  // Request Body
+  const body = JSON.stringify(user);
+  
+  axios
+    .put('api/auth/update_account', body, tokenConfig(getState))
+    .then((res) => {
+      dispatch({ type: USER_LOADING });
+      dispatch({
+        type: USER_UPDATE,
+        payload: res.data,
+      });
+      dispatch(createMessage({updateUser: "Account information updated"}));
+    })
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+// Change password
+export const changePassword = (passwords) => (dispatch, getState) => {
+ 
+  // Request Body
+  const body = JSON.stringify(passwords);
+  
+  axios
+    .put('/api/auth/change_password', body, tokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: USER_CHANGE_PASSWORD,
+        payload: res.data,
+      });
+      dispatch(createMessage({changePassword: "Password updated"}));
+    })
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+//DELETE USER
+export const deleteUser = () => (dispatch, getState) => {
+
+  axios
+    .delete('/api/auth/delete', tokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: USER_DELETE,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
 };

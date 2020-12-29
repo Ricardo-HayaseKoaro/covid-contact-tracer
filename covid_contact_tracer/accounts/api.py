@@ -41,6 +41,16 @@ class UserAPI(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+# Delete User
+class DeleteUserAPI(generics.DestroyAPIView):
+
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
 
 # Change password API
 class ChangePasswordAPI(generics.UpdateAPIView):
