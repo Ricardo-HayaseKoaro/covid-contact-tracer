@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { red } from '@material-ui/core/colors';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import DeleteDialog from './DeleteDialog';
 
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
     input: {
         marginRight: '3vw',
-
+        marginBottom: '12px'
     },
     inputFields: {
         display: 'flex',
@@ -78,6 +79,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 function Account(props) {
+    const minWidthMQ = useMediaQuery('(min-width:600px)');
 
     const classes = useStyles();
 
@@ -168,7 +170,7 @@ function Account(props) {
                 </Typography>
                 <form className={classes.form}>
                     <Box className={classes.sub}>
-                        <Box className={classes.inputFields}>
+                        <Box className={classes.inputFields} style={{flexDirection: minWidthMQ ? '' : 'column'}}>
                             <TextField
                                 label="Username"
                                 className={classes.input}
@@ -229,7 +231,7 @@ function Account(props) {
                 </Typography>
                 <form className={classes.form}>
                     <Box className={classes.sub}>
-                        <Box className={classes.inputFields}>
+                        <Box className={classes.inputFields}  style={{flexDirection: minWidthMQ ? '' : 'column'}}>
                             <TextField
                                 className={classes.input}
                                 variant="outlined"

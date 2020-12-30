@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import TimelineLocations from './TimelineLocations';
 import TimelinePlaceholder from './TimelinePlaceholder';
@@ -54,19 +55,13 @@ const useStyles = makeStyles((theme) => ({
     },
     dateInput: {
         display: 'flex',
-        justifyContent: 'space-between',
-        flex: 1,
         flexWrap: 'wrap'
     },
     switch: {
         display: 'flex',
         justifyContent: 'space-evenly',
-        flex: 1,
         flexWrap: 'wrap',
         marginTop: '5px'
-    },
-    timeLineWrapper: {
-        minWidth: 'fit-content',
     },
     wrapper: {
         justifyContent: 'center',
@@ -74,6 +69,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function HomePage(props) {
+
+    //Width control
+    const timelineWidthMQ = useMediaQuery('(min-width:400px)');
+    const dateInputMQ = useMediaQuery('(min-width:376px)');
+    
 
     const classes = useStyles();
     const [heatmap, setHeatmap] = React.useState(false);
@@ -88,8 +88,8 @@ function HomePage(props) {
     return (
         <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3} className={classes.wrapper}>
-                <Grid item xs={12} sm={6} className={classes.timeLineWrapper}>
-                    <Box className={classes.dateInput}>
+                <Grid item xs={12} sm={6} style={{minWidth: timelineWidthMQ ? 'fit-content' : ''}} >
+                    <Box className={classes.dateInput} style={{justifyContent: dateInputMQ ? 'space-between' : 'space-evenly'}}>
                         <TextField
                             id="datetime-local-start"
                             label="Start time"
@@ -124,7 +124,7 @@ function HomePage(props) {
                         } 
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={6} className={classes.timeLineWrapper}>
+                <Grid item xs={12} sm={6}>
                     <Box className={classes.switch}>
                         <FormControlLabel
                             control={

@@ -17,8 +17,7 @@ import Fade from '@material-ui/core/Fade';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import HelpIcon from '@material-ui/icons/Help';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import Modal from '../layout/Modal';
 import Help from '../layout/Help';
@@ -80,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    flexShrink: 0,
   },
   drawerPaper: {
     position: 'relative',
@@ -105,7 +105,6 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     height: '100vh',
-    overflow: 'auto',
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -143,18 +142,20 @@ const useStyles = makeStyles((theme) => ({
 
 function Copyright() {
   return (
-      <Typography variant="body2" color="textSecondary" align="center">
-          {'Copyright © '}
-          <Link color="inherit" href="https://material-ui.com/">
-              Your Website
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Your Website
       </Link>{' '}
-          {new Date().getFullYear()}
-          {'.'}
-      </Typography>
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
   );
 }
 
 function Dashboard(props) {
+
+  const toolBarMQ = useMediaQuery('(min-width:383px)');
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false); // For slide menu
@@ -209,7 +210,7 @@ function Dashboard(props) {
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
+        <Toolbar className={classes.toolbar} >
           <IconButton
             edge="start"
             color="inherit"
@@ -232,16 +233,10 @@ function Dashboard(props) {
               <Popper id={id} open={openPopper} anchorEl={anchorNotification} style={{ zIndex: 10000, marginRight: "1vw", }} transition placement="bottom-start">
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={0}>
-                    <NotificationsPopup notifications={props.notifications} handleClose={() => { handleCloseNotifications() }}/>
+                    <NotificationsPopup notifications={props.notifications} handleClose={() => { handleCloseNotifications() }} />
                   </Fade>
                 )}
               </Popper>
-              <IconButton color="inherit" type="button" onClick={handleUploadOpen}>
-                  <CloudUploadIcon />
-              </IconButton>
-              <IconButton color="inherit" type="button" onClick={handleHelpOpen}>
-                  <HelpIcon />
-              </IconButton>
             </div>
           </ClickAwayListener>
         </Toolbar>
@@ -259,16 +254,16 @@ function Dashboard(props) {
           </IconButton>
         </div>
         <Divider />
-        <ListItems/>
+        <ListItems handleHelpOpen={handleHelpOpen} handleUploadOpen={handleUploadOpen}/>
       </Drawer>
-      <main className={classes.content}>
+      <main className={classes.content} style={{ overflow: toolBarMQ ? 'auto ' : '' }}>
         <Modal />
-        <UploadLocations openUpload={openUpload} handleClose={handleUploadClose}/>
-        <Help open={openHelp} handleClose={handleHelpClose}/>
+        <UploadLocations openUpload={openUpload} handleClose={handleUploadClose} />
+        <Help open={openHelp} handleClose={handleHelpClose} />
         <div className={classes.appBarSpacer} />
         {cloneElement(props.children, { handleUploadOpen, handleHelpOpen })}
         <Box pt={2}>
-          <Copyright />
+          {/* <Copyright /> */}
         </Box>
       </main>
     </div>

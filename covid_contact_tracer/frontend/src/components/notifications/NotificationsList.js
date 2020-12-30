@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: "10px",
         position: 'relative',
         overflow: 'auto',
-        
+        display:'flex',
         height: '75vh',
     },
     head: {

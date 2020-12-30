@@ -21,7 +21,6 @@ import { loadUser } from '../actions/auth';
 //AlertOptions
 const AlertOptions = {
     timeout: 3000,
-    offset: '20px',
     position: 'bottom left',
     containerStyle: {
         zIndex: 5000,

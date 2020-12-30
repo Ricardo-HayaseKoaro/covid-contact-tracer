@@ -8,6 +8,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import Divider from '@material-ui/core/Divider';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import HelpIcon from '@material-ui/icons/Help';
 
 import { logout } from '../../actions/auth';
 import { connect } from 'react-redux';
@@ -35,6 +37,12 @@ function listItems(props) {
         </ListItemIcon>
         <ListItemText primary="Notifications" />
       </ListItem>
+      <ListItem button onClick={props.handleUploadOpen}>
+        <ListItemIcon>
+          <CloudUploadIcon />
+        </ListItemIcon>
+        <ListItemText primary="Upload Locations" />
+      </ListItem>
       <Divider />
       <ListItem button component={Link} to="/account">
         <ListItemIcon>
@@ -47,6 +55,13 @@ function listItems(props) {
           <ExitToAppIcon />
         </ListItemIcon>
         <ListItemText primary="Logout" />
+      </ListItem>
+      <Divider/>
+      <ListItem button onClick={props.handleHelpOpen}>
+        <ListItemIcon>
+          <HelpIcon />
+        </ListItemIcon>
+        <ListItemText primary="Help"/>
       </ListItem>
     </List>
   );
