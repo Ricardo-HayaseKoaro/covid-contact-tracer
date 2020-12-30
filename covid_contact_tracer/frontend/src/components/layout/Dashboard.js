@@ -79,7 +79,6 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    flexShrink: 0,
   },
   drawerPaper: {
     position: 'relative',
@@ -105,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     height: '100vh',
+    overflow: 'auto', 
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -256,7 +256,7 @@ function Dashboard(props) {
         <Divider />
         <ListItems handleHelpOpen={handleHelpOpen} handleUploadOpen={handleUploadOpen}/>
       </Drawer>
-      <main className={classes.content} style={{ overflow: toolBarMQ ? 'auto ' : '' }}>
+      <main className={classes.content}>
         <Modal />
         <UploadLocations openUpload={openUpload} handleClose={handleUploadClose} />
         <Help open={openHelp} handleClose={handleHelpClose} />

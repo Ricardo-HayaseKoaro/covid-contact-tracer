@@ -15,7 +15,6 @@ export const getLocations = (startTime, endTime) => (dispatch, getState) => {
           payload: res.data,
         });
         dispatch(createAlert({loadLocations: 'Locations Loaded'}, 'info'));
-        console.log(res.data);
         dispatch(centerMap(res.data[0]))
       })
       .catch(err => dispatch
