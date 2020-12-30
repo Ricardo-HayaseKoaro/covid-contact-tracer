@@ -5,7 +5,7 @@ import LocationCardMap from "./LocationCardMap"
 import PlaceIcon from '@material-ui/icons/Place';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import LOS_ANGELES_CENTER from './la_center';
+import DEFAULT_CENTER from './defaultCenter';
 
 // InfoWindow component
 const InfoWindow = (props) => {
@@ -146,8 +146,8 @@ function MarkerInfoWindow(props) {
     <>
       {(
         <GoogleMap
-          defaultZoom={13}
-          defaultCenter={LOS_ANGELES_CENTER}
+          defaultZoom={7}
+          defaultCenter={DEFAULT_CENTER}
           onChildClick={onChildClickCallback}
           onClick={onCloseChild}
           heatmap={heatmapData}
