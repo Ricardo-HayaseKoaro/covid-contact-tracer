@@ -12,9 +12,16 @@ export class Alerts extends Component {
     const { alert, alerts_info } = this.props;
     if (alerts_info.msg) {
       Object.keys( alerts_info.msg).map( (key) => {
-        alert.show(alerts_info.msg[key], {
-          type: alerts_info.type,
-        })
+        if (alerts_info.msg[key] == "This field is required") {
+          alert.show(key+" "+alerts_info.msg[key], {
+            type: alerts_info.type,
+          })
+        }
+        else{
+          alert.show(alerts_info.msg[key], {
+            type: alerts_info.type,
+          })
+        }
       });
     }
 
