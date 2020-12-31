@@ -14,7 +14,10 @@ export const getLocations = (startTime, endTime) => (dispatch, getState) => {
           type: GET_LOCATIONS,
           payload: res.data,
         });
-        dispatch(createAlert({loadLocations: 'Locations Loaded'}, 'info'));
+        if (res.data.length == 0)
+          dispatch(createAlert({loadLocations: 'No Locations were found'}, 'info'));
+        else
+          dispatch(createAlert({loadLocations: 'Locations Loaded'}, 'info'));
         dispatch(centerMap(res.data[0]))
       })
       .catch(err => dispatch
