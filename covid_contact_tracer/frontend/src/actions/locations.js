@@ -8,7 +8,7 @@ import { tokenConfig } from './auth';
 export const getLocations = (startTime, endTime) => (dispatch, getState) => {
   dispatch({ type: LOADING_DATA });
     axios
-      .get('/api/user_clusters/?start='+startTime+'&end='+endTime,  tokenConfig(getState))
+      .get('/api/locations/?start='+startTime+'&end='+endTime,  tokenConfig(getState))
       .then((res) => {
         dispatch({
           type: GET_LOCATIONS,
@@ -51,6 +51,7 @@ export const uploadLocations = (body) => (dispatch, getState) => {
 
     })
     .catch((err) => {
+      console.log(err);
       dispatch(createAlert(err.response.data, 'error'));
       dispatch({
         type: UPLOAD_FAIL,

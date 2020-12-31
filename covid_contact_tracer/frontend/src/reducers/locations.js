@@ -37,7 +37,10 @@ export default function(state = initialState, action) {
               isUploading: false,
             };
           case UPLOAD_FAIL:
-            return state;
+            return {
+              ...state,
+              isUploading: false,
+            };
           case UPLOADING:
             return {
               ...state,

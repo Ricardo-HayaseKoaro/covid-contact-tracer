@@ -37,8 +37,21 @@ class UploadLocationsDialog extends Component {
                 const timelineObjects = JSON.parse(item['result']);
                 objs = objs.concat(timelineObjects["timelineObjects"]);
             });
-            const request_data = { "timelineObjects": objs };
-            _this.props.uploadLocations((request_data));
+            objs = objs.filter((location) => Object.keys(location) == "placeVisit");
+            let locations = [];
+            objs.forEach((obj) => {
+                let location = {};
+                location["name"] = obj.placeVisit["location"]["name"];
+                location["placeId"] = obj.placeVisit["location"]["placeId"];
+                location["latitude"] = obj.placeVisit["location"]["latitudeE7"]/10000000;
+                location["longitude"] = obj.placeVisit["location"]["longitudeE7"]/10000000;
+                location["startTime"] = new Date(obj.placeVisit["duration"]["startTimestampMs"]/1).toISOString();
+                location["endTime"] = new Date(obj.placeVisit["duration"]["endTimestampMs"]/1).toISOString();
+                location["notified"] = false;
+                location["infected"] = false;
+                locations.push(location);
+            });
+            _this.props.uploadLocations((locations));
             _this.setState({
                 open: false,
             });
@@ -52,7 +65,7 @@ class UploadLocationsDialog extends Component {
                 onSave={this.handleSave.bind(this)}
                 acceptedFiles={['application/json']}
                 useChipsForPreview
-                filesLimit={1}
+                filesLimit={3}
                 onClose={this.props.handleClose}
                 dropzoneText={"Drag and drop your location history here or click"}
             />

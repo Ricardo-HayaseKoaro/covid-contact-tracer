@@ -1,16 +1,13 @@
 from locations.models import Location
 from rest_framework.decorators import action
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, generics, permissions, status
 from .serializers import LocationSerializer
 from rest_framework.response import Response
 from django_filters import rest_framework as filters
-from .utils import convertE7coord
-import datetime
-import googlemaps
 from decouple import config
-from .contact_tracer import getUserLocationWithCluster
+from .contactTracer import getContacts
 from .permission import IsOwner
-from rest_framework import permissions
+import googlemaps
 
 #Location Filter
 class LocationFilter(filters.FilterSet):
@@ -32,51 +29,52 @@ class LocationFilter(filters.FilterSet):
         model = Location
         fields = ['startTime', 'endTime']
 
+
 # Location Viewset
-class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
-    
+class LocationViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
     permission_classes = [
         permissions.IsAuthenticated,
         IsOwner,
     ]
-    serializer_class = LocationSerializer
     filterset_class = LocationFilter
+
+    serializer_class = LocationSerializer
 
     def get_queryset(self):
         return self.request.user.locations.all()
-
+    
     def create(self, request, *args, **kwargs):
-        # Create a list of dict with valid key - value for location model
-        locations = request.data["timelineObjects"]
-        user_locations = []
-        for local in locations:
-            if "placeVisit" in local:
-                new_local = dict()
-                new_local["name"] = local["placeVisit"]["location"]["name"]
-                new_local["placeId"] = local["placeVisit"]["location"]["placeId"]
-                new_local["latitude"] = convertE7coord(local["placeVisit"]["location"]["latitudeE7"])
-                new_local["longitude"] = convertE7coord(local["placeVisit"]["location"]["longitudeE7"])
-                epoch = int(local["placeVisit"]["duration"]["startTimestampMs"])/1000
-                new_local["startTime"] =  datetime.datetime.utcfromtimestamp(epoch).replace(tzinfo=datetime.timezone.utc)
-                epoch = int(local["placeVisit"]["duration"]["endTimestampMs"])/1000
-                new_local["endTime"] = datetime.datetime.utcfromtimestamp(epoch).replace(tzinfo=datetime.timezone.utc)
-                new_local["infected"] = False
-                new_local["notified"] = False
-                serializer = self.get_serializer(data=new_local)
-                serializer.is_valid(raise_exception=True)
-                self.perform_create(serializer)
-                user_locations.append(serializer.data)
-        
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
         # get contacts
-        start = user_locations[0]["startTime"]
-        end = user_locations[-1]["endTime"]
+        start = serializer.data[0]["startTime"]
+        end = serializer.data[-1]["endTime"]
+        # get all locations to search for a contact
         query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
         all_serializer = LocationSerializer(query, many=True)
-        locations = getUserLocationWithCluster(self.request.user, query, all_serializer.data)
-        return Response(locations)
+        locations = getContacts(self.request.user, query, all_serializer.data)
+
+        return Response(locations, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user) 
+
+    # Return user locations with clusters informations
+    def list(self, request):
+        # Get query param
+        start = self.request.query_params.get("start")
+        end = self.request.query_params.get("end")
+        # Get all locations
+        query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
+        if not query:
+            return Response([])
+
+        # Serialize
+        serializer = LocationSerializer(query, many=True)
+        locations = getContacts(self.request.user , query, serializer.data)
+        return Response(locations)
 
 
     # Return details provied by google places api
@@ -87,46 +85,5 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         return Response(place)
 
 
-
-# UserLocationCluster ViewSet - For getting user locations with cluster info
-class UserLocationClusterViewSet(viewsets.ViewSet):
-
-    permission_classes = [
-        permissions.IsAuthenticated,
-        IsOwner,
-    ]
-
-    # Return user locations with clusters informations
-    def list(self, request):
-        # Get query param
-        start = self.request.query_params.get("start")
-        end = self.request.query_params.get("end")
-        # Get all locations
-        query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
-
-        if not query:
-            return Response([])
-
-        # Serialize
-        serializer = LocationSerializer(query, many=True)
-    
-        locations = getUserLocationWithCluster(self.request.user , query, serializer.data)
-        return Response(locations)
-
-
-# LocationCluster ViewSet - all locations with cluster info (no info about users)
-class LocationClusterViewSet(viewsets.ViewSet):
-
-    # Return all locations with clusters informations
-    def list(self, request):
-        # Get query param
-        start = self.request.query_params.get("start")
-        end = self.request.query_params.get("end")
-        # Get all locations
-        query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end)
-        # Serialize
-        serializer = LocationSerializer(query, many=True)
-        locations = getLocationWithCluster(query, serializer.data)
-        return Response(locations)
 
     
