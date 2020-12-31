@@ -55,7 +55,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.R
         # get all locations to search for a contact
         query = Location.objects.all().filter(startTime__gte=start, endTime__lte=end).order_by("startTime")
         all_serializer = LocationSerializer(query, many=True)
-        locations = getContacts(self.request.user, query, all_serializer.data)
+        locations = getContacts(self.request.user, query, all_serializer.data, create= True)
 
         return Response(locations, status=status.HTTP_201_CREATED, headers=headers)
 

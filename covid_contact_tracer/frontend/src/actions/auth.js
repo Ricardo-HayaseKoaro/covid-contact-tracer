@@ -103,7 +103,7 @@ export const logout = () => (dispatch, getState) => {
       });
     })
     .catch((err) => {
-      // dispatch(createAlert(err.response.data, 'error'));
+      dispatch(createAlert(err.response.data, 'error'));
     });
 };
 

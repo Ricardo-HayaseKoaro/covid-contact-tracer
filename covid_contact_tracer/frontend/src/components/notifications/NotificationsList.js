@@ -192,7 +192,7 @@ function CollapsibleTable(props) {
     let body;
     if (props.notifications.length == 0){
         body = () => {
-            null;
+            <React.Fragment/>;
         };
     }
     else {

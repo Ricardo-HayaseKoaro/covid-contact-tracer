@@ -1,11 +1,13 @@
 from django_pandas.io import read_frame
 import pandas as pd
 from sklearn.cluster import DBSCAN
-
+from notifications.models import Notification
+from locations.models import Location
+from django.contrib.auth.models import User
 
 # Query all locations, return locations with object cluster and user location with cluster info
 # data is all locations serialized
-def getContacts(user, query, data):
+def getContacts(user, query, data, create=False):
     #Social distance
     safe_distance = 0.0018288 #6 feets in kilometers
     # Create panda of locations for data analysis
@@ -27,16 +29,29 @@ def getContacts(user, query, data):
             clusters[cluster_id].append(data[i])
     # Get user locations
     user_locations = list(filter(lambda location: location["owner"] == user.id, data))
+    # user_instance = User.objects.filter(pk=user)
     # Get the user intersections of a cluster
     for location in user_locations:
         # get locations that are in the same cluster
         list_locations_id = clusters[location["cluster_id"]]
         location["contacts"] = []
         for other_location in list_locations_id:
-            # intercts
+            # if inteserct
             if (location["startTime"] <=  other_location["endTime"] and location["endTime"] >=  other_location["startTime"] and location["id"]!=other_location["id"]
                 and location["owner"] != other_location["owner"] ):
                     location["contacts"].append(other_location["id"])
-    
-    
+
+                    # When creating new locations check if location was infected before
+                    if other_location["infected"] and create: 
+                        user_location = location.copy()
+                        user_location['infected'] = True 
+                        user_location.pop("notifications")
+                        user_location.pop("cluster_id")
+                        user_location.pop("contacts")
+                        user_location['owner'] = user # needs this to instanciate 
+                        location_instance = Location(**user_location)
+                        location_instance.save()
+                        Notification(user=user, notifier=False, visualized=False, location=location_instance).save() 
+                        # System notify user, no email
+
     return user_locations

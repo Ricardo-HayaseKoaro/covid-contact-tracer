@@ -60,7 +60,7 @@ export default function Placeholder(props) {
             </Box>
             <Box className={classes.help} fontSize='60px'>
                 <Typography variant='subtitle1'>
-                    For help click
+                    For Help Click
                 </Typography>
                 <IconButton onClick={props.handleHelpOpen}>
                     <HelpIcon fontSize='small'/>

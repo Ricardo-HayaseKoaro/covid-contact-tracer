@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from locations.models import Location 
 from notifications.models import Notification
-from rest_framework.validators import UniqueValidator
-
 
 # Notification Serializer
 class NotificationSerializer(serializers.ModelSerializer):
