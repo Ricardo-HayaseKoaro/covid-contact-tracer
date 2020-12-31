@@ -3,7 +3,6 @@ from locations.models import Location
 from rest_framework import viewsets, mixins, status
 from .serializers import NotificationSerializer, CreateNotificationSerializer
 from rest_framework.response import Response
-from .utils import email_notification
 from .permission import IsOwner
 from rest_framework import permissions
 

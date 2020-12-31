@@ -2,6 +2,7 @@ from rest_framework import serializers
 from notifications.models import Notification 
 from locations.models import Location
 from locations.serializers import LocationSerializer 
+from .utils import sendEmail
 
 # Notification Serializer
 class NotificationSerializer(serializers.ModelSerializer):
@@ -40,6 +41,7 @@ class CreateNotificationSerializer(serializers.ModelSerializer):
       notifications.append(notification)
     Location.objects.bulk_update(locations_contacted, ["infected"])
 
+
     # Creating user notification
     validated_data["notified"] = True
     validated_data["infected"] = True
@@ -48,6 +50,9 @@ class CreateNotificationSerializer(serializers.ModelSerializer):
       validated_data.pop(field)
     user_location = Location(**validated_data)
     user_location.save()
+
+    # Send notification to email
+    sendEmail(locations_contacted)
     
     # Create user notification
     notifications.append(Notification(user=validated_data["owner"], notifier=True, visualized=False, location=user_location))
