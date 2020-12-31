@@ -19,8 +19,7 @@ export const notify = (location) => (dispatch, getState) => {
     dispatch({ type: NOTIFYING });
 
     // Request Body
-    const body = JSON.stringify({ location });
-
+    const body = JSON.stringify(location);
     axios
     .post('/api/notifications/', body, tokenConfig(getState))
     .then((res) => {

@@ -31,7 +31,7 @@ class LocationFilter(filters.FilterSet):
 
 
 # Location Viewset
-class LocationViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
+class LocationViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
     permission_classes = [
         permissions.IsAuthenticated,
         IsOwner,
@@ -47,6 +47,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins
         serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
 
         # get contacts
         start = serializer.data[0]["startTime"]
@@ -56,7 +57,7 @@ class LocationViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins
         all_serializer = LocationSerializer(query, many=True)
         locations = getContacts(self.request.user, query, all_serializer.data)
 
-        return Response(locations, status=status.HTTP_201_CREATED)
+        return Response(locations, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user) 

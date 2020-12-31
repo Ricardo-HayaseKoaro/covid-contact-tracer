@@ -1,13 +1,13 @@
 from notifications.models import Notification
 from locations.models import Location
-from rest_framework import viewsets, mixins
-from .serializers import NotificationSerializer
+from rest_framework import viewsets, mixins, status
+from .serializers import NotificationSerializer, CreateNotificationSerializer
 from rest_framework.response import Response
 from .utils import email_notification
 from .permission import IsOwner
 from rest_framework import permissions
 
-class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.ListModelMixin):
+class NotificationViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin):
 
     permission_classes = [
         IsOwner,
@@ -17,31 +17,21 @@ class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixi
 
     def get_queryset(self):
         return self.request.user.notifications.all().order_by('-created_at')
+    
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateNotificationSerializer
+        else:
+            return NotificationSerializer
 
     def create(self, request, *args, **kwargs):
-        user_location_aux = request.data["location"]
-        locations = Location.objects.filter(pk__in=user_location_aux["contacts"])
-        notifications = []
-        # User that created the notification
-        user_location = Location.objects.get(pk=user_location_aux["id"])
-        # Check if the user has already notified this place
-        if user_location.notified == True:
-            return Response({message: "Location already notified"})
-        user_location.infected = True
-        user_location.notified = True
-        user_location.save()
-        notification = Notification(user=request.user, notifier=True, visualized=False, location=user_location)
-        notifications.append(notification)
-        for location in locations:
-            location.infected = True
-            notifier = False
-            # Validation necessary because user can upload same locations more than once
-            if location.owner == request.user:
-                notifier = True
-            notification = Notification(user=location.owner, notifier=notifier, visualized=False, location=location)
-            notifications.append(notification)
-        Location.objects.bulk_update(locations, ["infected"])
-        Notification.objects.bulk_create(notifications)
-        # email_notification(locations)       
-        return Response()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
         
+       
