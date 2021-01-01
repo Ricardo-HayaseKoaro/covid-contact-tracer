@@ -13,6 +13,8 @@ django-filter = "*"
 django-pandas = "*"
 numpy = "*"
 pandas = "*"
+sklearn = "*"
+pymysql = "*"
 
 [dev-packages]
 rope = "*"
