@@ -105,11 +105,11 @@ function NestedList() {
           <Typography variant="body1" className={classes.txt}>
             By clicking the location you will be abre to see details about the place, like number of people that you entered in contact, and the number of notification(possible encounters with infected people).
           </Typography>
-          <img src={"../../../static/helpScreenshots/Location.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/Location.png" } className={classes.img} />
           <Typography variant="body1" className={classes.txt}>
             Here you can notify (alert) another users about your infection or delete the location from the database.
           </Typography>
-          <img src={"../../../static/helpScreenshots/LocationCard.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/LocationCard.png" } className={classes.img} />
           <br/>
           <Typography variant="h6" className={classes.subtitle} >
             Alerts:
@@ -117,15 +117,15 @@ function NestedList() {
           <Typography variant="body1" className={classes.txt}>
             A location is marked as a yellow alert when you notified this place as a possible infected. 
           </Typography>
-          <img src={"../../../static/helpScreenshots/YellowAlert.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/YellowAlert.png" } className={classes.img} />
           <Typography variant="body1" className={classes.txt}>
             A location is marked as a red alert when another user notified this place as a possible infected. In this case keep attempt to COVID-19 symptoms and follow the instructions provided by the health authorities.
           </Typography>
-          <img src={"../../../static/helpScreenshots/RedAlert.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/RedAlert.png" } className={classes.img} />
           <Typography variant="body1" className={classes.txt}>
             When a location is notified by you and another user, it will display as a red alert and a text bellow the time will display that you notified too.
           </Typography>
-          <img src={"../../../static/helpScreenshots/DoubleAlert.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/DoubleAlert.png" } className={classes.img} />
           <br/>
         </Box>
       </Collapse>
@@ -144,7 +144,7 @@ function NestedList() {
           <Typography variant="h6" className={classes.subtitle} >
             Map:
           </Typography>
-          <img src={"../../../static/helpScreenshots/Map.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/Map.png" } className={classes.img} />
           <Typography variant="body1" className={classes.txt}>
             Map all your timeline, be careful that is possible that multiple locations stack, when this happens, the alerts will be on top. You can click the icon to view more datails.
           </Typography>
@@ -167,7 +167,7 @@ function NestedList() {
           <Typography variant="body1" className={classes.txt}>
             Show in a format of heatmap the places that you visited, more brighter more is the density.
           </Typography>
-          <img src={"../../../static/helpScreenshots/Heatmap.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/HeatMap.png" } className={classes.img} />
           <br/>
         </Box>
       </Collapse>
@@ -190,22 +190,22 @@ function NestedList() {
           <Typography variant="body1" className={classes.txt}>
             Google store all your data, wich includes your geographic location. We will use that data, to analyze and compare with other users data, when a contact happens. Don't worry only you have acess to your data in Contact Tracerr. 
           </Typography>
-          <img src={"../../../static/helpScreenshots/Login.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/Login.png" } className={classes.img} />
           <Typography variant="h6" className={classes.subtitle} >
             Step 2: Go to Google Takeout
           </Typography>
-          <img src={"../../../static/helpScreenshots/Takeout.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/Takeout.png" } className={classes.img} />
           <Typography variant="body1" className={classes.txt}>
             In "Multiple formats" choose JSON 
           </Typography>
-          <img src={"../../../static/helpScreenshots/TakeoutFormat.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/TakeoutFormat.png" } className={classes.img} />
           <Typography variant="body1" className={classes.txt}>
             Click "Next step"
           </Typography>
           <Typography variant="body1" className={classes.txt}>
             Choose your delivery method, frequency, file type, and maximum size. For our purpose just one export is enough, if you have a good network connection you can change the limit size to a larger one.
           </Typography>
-          <img src={"../../../static/helpScreenshots/TakeoutConfig.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/TakeoutConfig.png" } className={classes.img} />
           <Typography variant="body1" className={classes.txt}>
             Click "Create export". This can take a few minutes, after that the export will be delivered to the place you chose in delivery method.
           </Typography>
@@ -222,11 +222,11 @@ function NestedList() {
           <Typography variant="body1" className={classes.txt}>
             We don't recommend using this file, because of the large size, what we recommend using the files inside the folder "Semantic Location History, that separates your history by year and month.          
           </Typography>
-          <img src={"../../../static/helpScreenshots/Folders.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/Folders.png" } className={classes.img} />
           <Typography variant="body1" className={classes.txt}>
             Now just use the upload tool in the website.
           </Typography>
-          <img src={"../../../static/helpScreenshots/Upload.png" } className={classes.img} />
+          <img src={"../../../static/helpImages/Upload.png" } className={classes.img} />
           <br/>
         </Box>
       </Collapse>
