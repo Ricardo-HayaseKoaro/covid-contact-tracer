@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '_)zrv43*-i@ol!f9mqfyekh8i!)x2m%*kj(tu31ee)-p2161vz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['covid-contact-tracer-295400.rj.r.appspot.com']
 
