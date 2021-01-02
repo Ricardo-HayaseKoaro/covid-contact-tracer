@@ -118,4 +118,8 @@ media/
 # !**/migrations/__init__.py
 node_modules
 
-# covid_contact_tracer/covid_contact_tracer/settings.py
+covid_contact_tracer/cloud_sql_proxy
+covid_contact_tracer/app.yaml
+covid_contact_tracer/.gcloudignore
+covid_contact_tracer/static
+covid_contact_tracer/requirements.txt
