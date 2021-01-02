@@ -113,9 +113,9 @@ media/
 # Ignore Django Migrations in Development if you are working on team
 
 # Only for Development only
-**/migrations/**
-!**/migrations
-!**/migrations/__init__.py
+# **/migrations/**
+# !**/migrations
+# !**/migrations/__init__.py
 node_modules
 
-covid_contact_tracer/covid_contact_tracer/settings.py
+# covid_contact_tracer/covid_contact_tracer/settings.py
