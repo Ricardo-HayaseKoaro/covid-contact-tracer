@@ -51,7 +51,8 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    isLoading: state.auth.isLoading
   }
 }
 
@@ -126,6 +127,7 @@ function Login(props) {
             label="Remember me"
           /> */}
           <Button
+            disabled={props.isLoading === true}
             type="submit"
             fullWidth
             variant="contained"
